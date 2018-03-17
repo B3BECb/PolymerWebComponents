@@ -34,6 +34,16 @@ class ValidableInput
 		};
 	}
 
+	valueChanged(args)
+	{
+		this.IsValueValid();
+
+		this.dispatchEvent(new CustomEvent("valueChanged",
+			{
+				detail: args.currentTarget.value,
+			}));
+	}
+
 	IsValueValid()
 	{
 		if(!this.validator)

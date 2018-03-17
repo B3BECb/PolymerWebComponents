@@ -79,6 +79,7 @@
 			</div>
 			<input type = "[[type]]"
 				   value="{{value::input}}"
+				   on-input="valueChanged"
 				   oninput = "if(!this.value) { this.style.display = 'none'; this.parentElement.querySelector('.label').style.fontSize = '16px'; }" />
 			<div class = "divLine"></div>
 			<div class = "error">[[errorText]]</div>
