@@ -5,8 +5,12 @@
 			type = "text/javascript"></script>
 </head>
 <body>
-	<custom-element></custom-element>
-	<validable-input id="vi" title="abc" error-text="123" noCollapse></validable-input>
+<custom-element></custom-element>
+<validable-input id = "vi"
+				 title = "abc"
+				 validator = "value && value.trim() ? true : false"
+				 error-text = "123"
+				 noCollapse></validable-input>
 </body>
 <script type = "text/javascript">
 

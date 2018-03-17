@@ -36,7 +36,7 @@ class ValidableInput
 
 	valueChanged(args)
 	{
-		this.IsValueValid();
+		this.IsValueValid(args.currentTarget.value);
 
 		this.dispatchEvent(new CustomEvent("valueChanged",
 			{
@@ -44,14 +44,16 @@ class ValidableInput
 			}));
 	}
 
-	IsValueValid()
+	IsValueValid(value)
 	{
 		if(!this.validator)
 		{
 			return true;
 		}
 
-		var validationRusult = eval(this.validator);
+		var argumented = `var func = (value='${value}') => ${this.validator}; func()`;
+
+		var validationRusult = eval(argumented);
 
 		if(!validationRusult)
 		{
