@@ -23,7 +23,7 @@
 			this.Loaded        = false;
 			this.ReferenceName = `Included_${contentType}_${id}`;
 		}
-	};
+	}
 
 	/**
 	 * Загручик зависимостей
@@ -31,7 +31,7 @@
 	class Builder
 	{
 		/**
-		 * Создаёт загрузчик зависимостей
+		 * Создаёт загрузчик зависимостей {@link Builder}
 		 */
 		constructor()
 		{
@@ -53,11 +53,31 @@
 		}
 
 		/**
+		 * Поддерживает ли браузер технологию Link Import
+		 * @returns {boolean}
+		 */
+		get IsImportsSupports()
+		{
+			return 'import' in document.createElement('link');
+		}
+
+		/**
+		 * Подключает [web компоненты]{@link https://www.webcomponents.org/} и [polymer]{@link https://www.polymer-project.org/}
+		 * @constructor
+		 * @return {Builder}
+		 */
+		EnableWebComponents()
+		{
+			return this
+			.RegisterScript("https://polygit.org/components/webcomponentsjs/webcomponents-loader.js")
+			.RegisterHtmlTemplate("https://polygit.org/components/polymer/polymer-element.html");
+		}
+
+		/**
 		 * Выполняет регистрацию скрипта
 		 * @param {String} ref - Ссылка на скрипт
 		 * @param {function} onLoaded - Функция вызываемая после загрузки скрипта
 		 * @returns {Builder}
-		 * @constructor
 		 */
 		RegisterScript(ref, onLoaded = null)
 		{
@@ -97,7 +117,6 @@
 		 * @param {String} ref - Ссылка на страницу
 		 * @param {function} onLoaded - Функция вызываемая после загрузки страницы
 		 * @returns {Builder}
-		 * @constructor
 		 */
 		RegisterHtmlTemplate(ref, onLoaded = null)
 		{
@@ -139,7 +158,6 @@
 		 * Загрузить и разрешить зависимости
 		 * @param id - порядковый номер в массиве
 		 * @returns {Builder.Build}
-		 * @constructor
 		 */
 		Build(id = null)
 		{
@@ -195,7 +213,6 @@
 
 		/**
 		 * Выполнить после загрузки всех зависимостей
-		 * @constructor
 		 */
 		AfterAll()
 		{
@@ -205,8 +222,7 @@
 
 		/**
 		 * Выполнить после каждой загрузки
-		 * @param ref
-		 * @constructor
+		 * @param ref - зависимость
 		 */
 		AfterEach(ref)
 		{

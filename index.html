@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html id = "pageLogin">
 <head>
-	<script src="https://polygit.org/components/webcomponentsjs/webcomponents-loader.js"></script>
-    <link rel="import" href="custom-element.html">
+	<script src = "ReferenceAssembler.js"
+			type = "text/javascript"></script>
+</head>
 <body>
 <custom-element></custom-element>
 </body>
-<script type="text/javascript">
+<script type = "text/javascript">
 
-Builder
-	.RegisterScript("FetchApiExtension.js")
-	.RegisterScript("ValidableInput/ValidableInput.js")
-	.Build();
+	if(window.Builder.IsImportsSupports)
+	{
+		alert('грузим старые компоненты');
+	}
+	else
+	{
+		window.Builder
+			  .EnableWebComponents()
+			  .RegisterHtmlTemplate("custom-element.html")
+			  .Build();
+
+		alert('грузим polymer компоненты');
+	}
 
 </script>
 </html>
