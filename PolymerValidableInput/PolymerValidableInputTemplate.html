@@ -1,10 +1,87 @@
-<!DOCTYPE html>
-<html lang = "en">
-<head>
-	<meta charset = "UTF-8">
-	<title>Title</title>
-</head>
-<body>
+<dom-module id = "validable-input">
+	<template id = "main">
+		<style>
+			@font-face
+			{
+				font-family: "Roboto";
+				src:         url("../fonts/Roboto/Roboto-Regular.ttf");
+			}
 
-</body>
-</html>
+			:host([error])
+			{
+				color: #D32F2F;
+			}
+
+			:host([error]) .divLine
+			{
+				border-color: #D32F2F;
+				border-width: 1px;
+			}
+
+			:host([error]) .error
+			{
+				display: block;
+			}
+
+			:host
+			{
+				font-family: "Roboto";
+			}
+
+			:host([noCollapse]) .label
+			{
+				font-size: 12px !important;
+			}
+
+			.label
+			{
+				margin-top: 8px;
+				font-size:  16px;
+			}
+
+			.error
+			{
+				font-size:     12px;
+				margin-bottom: 4px;
+				margin-top:    4px;
+				display:       none;
+			}
+
+			.divLine
+			{
+				width:      100%;
+				border:     0.5px solid #757575;
+				margin-top: 8px;
+			}
+
+			:host([noCollapse]) input
+			{
+				display: block !important;
+			}
+
+			input
+			{
+				display:    none;
+				border:     none;
+				background: transparent;
+				font-size:  16px;
+				padding:    0px;
+				width:      100%;
+				outline:    none;
+				margin-top: 8px;
+				color:      inherit;
+			}
+		</style>
+		<div>
+			<div class = "label"
+				 onclick = "this.parentElement.querySelector('input').style.display = 'block'; this.style.fontSize = '12px';">
+				[[title]]
+			</div>
+			<input type = "[[type]]"
+				   value="{{value::input}}"
+				   oninput = "if(!this.value) { this.style.display = 'none'; this.parentElement.querySelector('.label').style.fontSize = '16px'; }" />
+			<div class = "divLine"></div>
+			<div class = "error">[[errorText]]</div>
+		</div>
+	</template>
+</dom-module>

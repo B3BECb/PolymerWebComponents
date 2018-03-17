@@ -5,11 +5,12 @@
 			type = "text/javascript"></script>
 </head>
 <body>
-<custom-element></custom-element>
+	<custom-element></custom-element>
+	<validable-input id="vi" title="abc" error-text="123" noCollapse></validable-input>
 </body>
 <script type = "text/javascript">
 
-	if(window.Builder.IsImportsSupports)
+	if(window.Builder.IsImportsSupports & 0)
 	{
 		alert('грузим старые компоненты');
 	}
@@ -18,9 +19,10 @@
 		window.Builder
 			  .EnableWebComponents()
 			  .RegisterHtmlTemplate("custom-element.html")
+			  .RegisterScript("PolymerValidableInput/PolymerValidableInput.js")
 			  .Build();
 
-		alert('грузим polymer компоненты');
+		//alert('грузим polymer компоненты');
 	}
 
 </script>
