@@ -1,0 +1,70 @@
+<template id = "main">
+	<style>
+		:host
+		{
+			display:    block;
+			margin-top: 13px;
+		}
+
+		.markContainer
+		{
+			width:         14px;
+			height:        14px;
+			border:        2px solid rgba(0, 0, 0, 0.54);
+			padding:       1px;
+			border-radius: 2px;
+			cursor:        pointer;
+			transition:    background-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1), border-color 90ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+		}
+
+		:host([disabledAnimation]) .markContainer:before, .markContainer:after
+		{
+			display: none;
+		}
+
+		.markContainer:before, .markContainer:after
+		{
+			background-color: rgba(33, 33, 33, 0.14);
+			position:         absolute;
+			top:              0;
+			left:             3px;
+			width:            48px;
+			height:           100%;
+			transition:       opacity 250ms linear;
+			border-radius:    50%;
+			opacity:          0;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		.markContainer:active:after, .markContainer:hover:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		:host([checked]) .markContainer
+		{
+			background: #1976D2;
+		}
+
+		:host([checked]) .markContainer .mark
+		{
+			stroke-dashoffset: 0;
+		}
+
+		.markContainer .mark
+		{
+			transition:        stroke-dashoffset 180ms 0ms cubic-bezier(0.4, 0, 0.6, 1);
+			stroke:            white !important;
+			stroke-width:      3.12px;
+			stroke-dashoffset: 29.78334;
+			stroke-dasharray:  29.78334;
+		}
+	</style>
+	<div class = "markContainer">
+		<svg viewBox = "0 0 24 24">
+			<path class = 'mark' fill = "none" stroke = "white" d = "M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+		</svg>
+	</div>
+</template>

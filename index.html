@@ -11,6 +11,15 @@
 				 validator = "value && value.trim() ? true : false"
 				 error-text = "123"
 				 noCollapse></validable-input>
+<div
+		style = "position: relative;
+		height: 48px;
+		padding-left: 17px;
+		padding-top: 2px;
+		margin-left: -17px;
+		margin-top: -2px;">
+	<material-check-box></material-check-box>
+</div>
 </body>
 <script type = "text/javascript">
 
@@ -24,6 +33,7 @@
 			  .EnableWebComponents()
 			  .RegisterHtmlTemplate("custom-element.html")
 			  .RegisterScript("PolymerValidableInput/PolymerValidableInput.js")
+			  .RegisterScript("PolymerCheckBox/PolymerCheckBox.js")
 			  .Build();
 
 		//alert('грузим polymer компоненты');
