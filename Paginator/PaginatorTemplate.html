@@ -1,0 +1,137 @@
+<template id = "main">
+	<style>
+		@font-face
+		{
+			font-family: "Roboto";
+			src:         url("../fonts/Roboto/Roboto-Regular.ttf");
+		}
+
+		:host
+		{
+			font-family: Roboto;
+			font-size:   16px;
+			font-weight: 600;
+			display:     block;
+		}
+
+		.item
+		{
+			background-color: white;
+			display:          inline-block;
+			width:            42px;
+			height:           29px;
+			margin-right:     -4px;
+			vertical-align:   top;
+			text-align:       center;
+			padding-top:      13px;
+			border:           1px solid #DDDDDD;
+			border-left:      none;
+			color:            #1565C0;
+			cursor:           pointer;
+		}
+
+		.item:not(.disabled):hover
+		{
+			background-color: #1976D2;
+			color:            white;
+		}
+
+		.item:not(.disabled):hover:active
+		{
+			background-color: #01579B;
+		}
+
+		.item:not(.disabled):hover path
+		{
+			fill:   white;
+			stroke: white;
+		}
+
+		.item path
+		{
+			fill:   #1565C0;
+			stroke: #1565C0;
+		}
+
+		.itemsGroup:not(.pages) .item
+		{
+			padding-top: 9px;
+			height:      33px;
+		}
+
+		.controlsBackward .first
+		{
+			border-left: 1px solid #DDDDDD;
+		}
+
+		.selected
+		{
+			background-color: #1976D2;
+			color:            white;
+			cursor:           default;
+		}
+
+		.disabled.item path
+		{
+			fill:   #6F6F6F;
+			stroke: #6F6F6F;
+		}
+
+		.disabled
+		{
+			cursor: default;
+		}
+
+		@media (max-width: 700px)
+		{
+			.item
+			{
+				width:       35px;
+				height:      24px;
+				padding-top: 9px;
+			}
+
+			.itemsGroup:not(.pages) .item
+			{
+				padding-top: 5px;
+				height:      28px;
+			}
+		}
+	</style>
+	<div class = "container">
+		<span class = "itemsGroup controlsBackward">
+			<span class = "item first disabled">
+				<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+					<path fill = "#000000" d = "m6.34821,6.08163l0,12" fill-rule = "nonzero" stroke-linejoin = "round"
+						  stroke-width = "2" stroke = "#000000"></path>
+					<path fill = "#000000" d = "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+				</svg>
+			</span>
+			<span class = "item last disabled">
+				<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+					<path fill = "#000000" d = "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+				</svg>
+			</span>
+		</span>
+		<span class = "itemsGroup pages">
+		</span>
+		<span class = "itemsGroup controlsForward">
+			<span class = "item disabled next">
+				<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+					<path fill = "#000000" d = "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+				</svg>
+			</span>
+			<span class = "item disabled last">
+				<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+					<path fill = "#000000" d = "M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
+					<path id = "svg_2" d = "m17.94286,5.91837l0,12" fill-rule = "nonzero" stroke-linejoin = "round"
+						  stroke-width = "2" stroke = "#000000" fill = "#ffffff" />
+				</svg>
+			</span>
+		</span>
+	</div>
+</template>
+
+<template id = "item">
+	<span class = "item"></span>
+</template>
