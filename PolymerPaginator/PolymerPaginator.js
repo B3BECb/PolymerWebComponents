@@ -63,7 +63,7 @@ class MDPaginator
 
 	goToPage(args)
 	{
-		var page = args.srcElement.textContent;
+		var page = args.currentTarget.textContent;
 	}
 
 	CalcPages()

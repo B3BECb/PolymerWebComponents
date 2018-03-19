@@ -36,11 +36,11 @@ class DotsMenu
 
 	_fireCallback(args)
 	{
-		if(args.srcElement.callback)
-			args.srcElement.callback();
+		if(args.currentTarget.callback)
+			args.currentTarget.callback();
 	}
 
-	_OnCustomIconLoaded(args)
+	_OnCustomIconLoaded()
 	{
 		let iconContainer = Polymer.dom(this.root).querySelector('#customIcon' + (this.items.length - 1));
 		iconContainer.appendChild(iconContainer.icon);
