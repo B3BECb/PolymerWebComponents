@@ -29,16 +29,35 @@ class DotsMenu
 				value()
 				{
 					return [];
-				}
-			}
+				},
+			},
 		};
+	}
+
+	_fireCallback(args)
+	{
+		if(args.srcElement.callback)
+			args.srcElement.callback();
+	}
+
+	_OnCustomIconLoaded(args)
+	{
+		let iconContainer = Polymer.dom(this.root).querySelector('#customIcon' + (this.items.length - 1));
+		iconContainer.appendChild(iconContainer.icon);
 	}
 
 	AddItem(value, callback = null, type = null)
 	{
+		let text = value;
+		let icon;
+		if(Array.isArray(value))
+		{
+			text = value[0];
+			icon = value[1];
+		}
 		this.items.push(
 			{
-				value: value,
+				value: text,
 				callback: callback,
 				type:
 					{
@@ -46,7 +65,8 @@ class DotsMenu
 						edit : type == "edit" ? true : false,
 						switchView : type == "switchView" ? true : false,
 						custom : type == "custom" ? true : false,
-					}
+					},
+				icon: icon,
 			}
 		);
 
