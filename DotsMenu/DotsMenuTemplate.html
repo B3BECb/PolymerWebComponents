@@ -1,0 +1,172 @@
+<template id = "main">
+	<style>
+		:host
+		{
+			margin-top: 12px;
+			display:    block;
+		}
+
+		:host(:not([disabled])) .dotsContainer
+		{
+			cursor: pointer;
+		}
+
+		.dotsContainer:before, .dotsContainer:after
+		{
+			background-color: rgba(3, 155, 229, 0.55);
+			position:         absolute;
+			top:              0;
+			right:            19px;
+			width:            48px;
+			height:           100%;
+			transition:       opacity 250ms linear;
+			border-radius:    50%;
+			opacity:          0;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		:host(:not([disabled])) .dotsContainer:active:after, :host(:not([disabled])) .dotsContainer:hover:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		.menuList
+		{
+			background:       white;
+			right:            30px;
+			position:         absolute;
+			top:              10px;
+			font-size:        15px;
+			padding-top:      8px;
+			padding-bottom:   8px;
+			min-width:        calc(3 * 64px);
+			box-shadow:       0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+			display:          none;
+			opacity:          0;
+			transform:        scale(1, 1);
+			transform-origin: right top 0px;
+			cursor:           inherit;
+			z-index:          3;
+			width:            max-content;
+		}
+
+		:host(:not([disabled])) .dotsContainer:active + .menuList, .menuList:hover
+		{
+			display:   block;
+			transform: scale(1);
+			opacity:   1;
+		}
+
+		.menuList .item
+		{
+			padding-left:  24px;
+			height:        32px;
+			line-height:   2;
+			position:      relative;
+			cursor:        pointer;
+			padding-right: 10px;
+		}
+
+		.menuList .item:before
+		{
+			position:      absolute;
+			top:           0;
+			left:          0;
+			width:         100%;
+			height:        100%;
+			transition:    opacity 120ms cubic-bezier(0, 0, 0.2, 1);
+			border-radius: inherit;
+			background:    currentColor;
+			content:       "";
+			opacity:       0;
+		}
+
+		.menuList .item:active:before
+		{
+			opacity: .18;
+		}
+
+		:host([disabled]) .dotsContainer .dots
+		{
+			fill: #BDBDBD;
+		}
+
+	</style>
+	<div class = "dotsContainer">
+	</div>
+	<div class = "menuList">
+
+	</div>
+</template>
+
+<template id = "dotsIcon">
+	<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+		<path fill = "#616161" class = "dots"
+			  d = "M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,
+				  16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,
+				  4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+	</svg>
+</template>
+
+<template id = "settingsIcon">
+	<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+		<path fill = "#6F6F6F" d = "M12,15.5A3.5,3.5 0 0,1 8.5,
+							12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,
+							3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,
+							12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,
+							8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,
+							6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,
+							2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,
+							6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,
+							9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,
+							12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,
+							18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,
+							21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,
+							18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,
+							18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+	</svg>
+</template>
+
+<template id = "item">
+	<div class = "item">
+		<span class = "icon">
+		</span>
+		<span class = "text"></span>
+	</div>
+</template>
+
+<template id = "remove">
+	<span style = "width: 40px; display: inline-block; position: relative; top: 6px;">
+		<svg style = "width:24px;height:24px" viewBox = "4 0 24 24">
+			<path fill = "#616161"
+				  d = "M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+		</svg>
+	</span>
+</template>
+
+<template id = "edit">
+	<span style = "width: 40px; display: inline-block; position: relative; top: 6px;">
+		<svg style = "width:19px;height:24px" viewBox = "2 0 24 24">
+   			<path fill = "#616161" d = "M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,
+   			10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,
+   			2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,
+   			15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29" />
+		</svg>
+	</span>
+</template>
+
+<template id = "switchView">
+	<span style = "width: 40px; display: inline-block; position: relative; top: 6px;">
+		<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+			<path fill = "#000000" d = "M13,3V9H21V3M13,21H21V11H13M3,21H11V15H3M3,13H11V3H3V13Z" />
+		</svg>
+	</span>
+</template>
+
+<template id = "custom">
+	<span style = "width: 40px; display: inline-block; position: relative; top: 6px;">
+		
+	</span>
+</template>
