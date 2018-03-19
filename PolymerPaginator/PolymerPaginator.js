@@ -1,11 +1,11 @@
-Builder
-.RegisterHtmlTemplate("PolymerPaginator/PolymerPaginatorTemplate.html",
-	(link) =>
-	{
-		MDPaginator.Link = document.querySelector('#' + link.ReferenceName);
+window.Builder
+	  .RegisterHtmlTemplate("PolymerPaginator/PolymerPaginatorTemplate.html",
+		  (link) =>
+		  {
+			  MDPaginator.Link = document.querySelector('#' + link.ReferenceName);
 
-		window.customElements.define(MDPaginator.is, MDPaginator);
-	});
+			  window.customElements.define(MDPaginator.is, MDPaginator);
+		  });
 
 class MDPaginator
 	extends Polymer.Element
@@ -20,19 +20,23 @@ class MDPaginator
 		super();
 
 		this.CurrentOffset = 0;
-		this.OffsetCount   = 0;
-		this.TotalRecords  = 0;
+		this.OffsetCount = 0;
+		this.TotalRecords = 0;
 
-		this.TotalPages  = 0;
+		this.TotalPages = 0;
 		this.CurrentPage = 0;
 	}
 
 	static get properties()
 	{
 		return {
-			pages      : {
-				notify  : true,
-				readOnly: false,
+			pages: {
+				value()
+				{
+					return [
+						//{id:'1', selected: 'selected'},
+					];
+				},
 			},
 		};
 	}
@@ -57,18 +61,22 @@ class MDPaginator
 		this.Paginate(this.TotalPages);
 	}
 
+	goToPage(args)
+	{
+		var page = args.srcElement.textContent;
+	}
 
 	CalcPages()
 	{
-		this.TotalPages  = Math.ceil(this.TotalRecords / this.OffsetCount);
+		this.TotalPages = Math.ceil(this.TotalRecords / this.OffsetCount);
 		this.CurrentPage = this.CurrentOffset / this.OffsetCount + 1;
 	}
 
 	Update(currentOffset, offsetCount, totalRecords)
 	{
 		this.CurrentOffset = currentOffset;
-		this.OffsetCount   = offsetCount;
-		this.TotalRecords  = totalRecords;
+		this.OffsetCount = offsetCount;
+		this.TotalRecords = totalRecords;
 	}
 
 	PaginateForward()
@@ -93,24 +101,12 @@ class MDPaginator
 
 		this.CurrentOffset = (pageIndex - 1) * this.OffsetCount;
 
-		this.dispatchEvent(new CustomEvent("pageChanged", {detail:this}));
-	}
-
-	Test()
-	{
-		var a = this.pages;
+		this.dispatchEvent(new CustomEvent("pageChanged", {detail: this}));
 	}
 
 	FillPagesNumbers()
 	{
-		/*var pages = this.shadowRoot.querySelector('.pages');
-		pages.querySelectorAll(".item")
-			 .forEach(
-				 function(element)
-				 {
-					 element.parentNode.removeChild(element);
-				 },
-			 );*/
+		this.pages = [];
 
 		if(!this.TotalPages)
 		{
@@ -122,9 +118,9 @@ class MDPaginator
 
 			var pageRange = 3;
 			var start = this.CurrentPage;
-			var stop = start + (Math.ceil(pageRange/2) - pageRange%2);
+			var stop = start + (Math.ceil(pageRange / 2) - pageRange % 2);
 
-			//var items = this.shadowRoot.querySelectorAll('.controlsBackward .item');
+			var items = this.root.querySelectorAll('.controlsBackward .item');
 			if(this.CurrentPage != 1)
 			{
 				items.forEach(
@@ -133,8 +129,8 @@ class MDPaginator
 						item.classList.remove('disabled');
 					});
 
-				start = this.CurrentPage - (Math.ceil(pageRange/2) - pageRange%2);
-				stop = this.CurrentPage + (Math.ceil(pageRange/2) - pageRange%2);
+				start = this.CurrentPage - (Math.ceil(pageRange / 2) - pageRange % 2);
+				stop = this.CurrentPage + (Math.ceil(pageRange / 2) - pageRange % 2);
 			}
 			else
 			{
@@ -145,7 +141,7 @@ class MDPaginator
 					});
 			}
 
-			//items = this.shadowRoot.querySelectorAll('.controlsForward .item');
+			items = this.root.querySelectorAll('.controlsForward .item');
 			if(this.CurrentPage != this.TotalPages)
 			{
 				items.forEach(
@@ -162,34 +158,25 @@ class MDPaginator
 						item.classList.add('disabled');
 					});
 
-				start = this.CurrentPage - (Math.ceil(pageRange/2) - pageRange%2);
+				start = this.CurrentPage - (Math.ceil(pageRange / 2) - pageRange % 2);
 				stop = this.TotalPages;
 			}
 
 			for(let i = start; i <= stop && i <= this.TotalPages; i++)
 			{
 				if(i < 1)
+				{
 					continue;
+				}
 
-				var page = MDPaginator.Link.import.querySelector('template#item').content;
-				pages.appendChild(page.cloneNode(true));
-
-				var item         = pages.querySelectorAll(".item");
-				item             = item[item.length - 1];
-				item.textContent = i;
+				var item = {id: i, selected: ''};
 
 				if(i == this.CurrentPage)
 				{
-					item.classList.add('selected');
+					item.selected = 'selected';
 				}
-				else
-				{
-					item.addEventListener('click',
-						() =>
-						{
-							this.Paginate(i);
-						})
-				}
+
+				this.pages.push(item);
 			}
 		}
 	}

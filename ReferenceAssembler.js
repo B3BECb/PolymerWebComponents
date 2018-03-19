@@ -69,8 +69,9 @@
 		EnableWebComponents()
 		{
 			return this
-			.RegisterScript("https://polygit.org/components/webcomponentsjs/webcomponents-loader.js")
-			.RegisterHtmlTemplate("https://polygit.org/components/polymer/polymer-element.html");
+			//.RegisterScript("https://polygit.org/components/webcomponentsjs/webcomponents-loader.js")
+			.RegisterScript("webcomponents/webcomponents-loader.js")
+			.RegisterHtmlTemplate("https://polygit.org/components/polymer/polymer.html");
 		}
 
 		/**

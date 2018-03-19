@@ -125,7 +125,13 @@
 			</span>
 		</span>
 			<span class = "itemsGroup pages">
-				{{pages}}
+				<dom-repeat id = "insertedPages"
+							items = "{{pages}}">
+					<template>
+						<span on-click = "goToPage"
+							  class$= "item {{item.selected}}">{{item.id}}</span>
+					</template>
+				</dom-repeat>
 		</span>
 			<span class = "itemsGroup controlsForward">
 			<span class = "item disabled next"
