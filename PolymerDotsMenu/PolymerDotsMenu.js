@@ -42,6 +42,7 @@ class DotsMenu
 
 	_OnCustomIconLoaded()
 	{
+		//FIXME: переписать на промисы
 		let iconContainer = Polymer.dom(this.root).querySelector('#customIcon' + (this.items.length - 1));
 		iconContainer.appendChild(iconContainer.icon);
 	}
@@ -73,5 +74,7 @@ class DotsMenu
 		let list = this.items;
 		this.items = [];
 		this.items = list;
+
+		//FIXME: Должен возвращать добавленный элемент. Переписать на промисы!
 	}
 }

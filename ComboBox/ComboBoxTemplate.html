@@ -1,0 +1,178 @@
+<template id = "main">
+	<style>
+		@font-face
+		{
+			font-family: "Roboto";
+			src:         url("../../fonts/Roboto/Roboto-Regular.ttf");
+		}
+
+		:host
+		{
+			font-family: "Roboto";
+			display:     inline-block;
+		}
+
+		:host([error]), :host([error]) .label
+		{
+			color: #D32F2F;
+		}
+
+		:host([error]) .divLine
+		{
+			border-width: 1px;
+		}
+
+		:host([error]) .divLine, :host([error]) .inputBox:hover .divLine
+		{
+			border-color: #B71C1C;
+		}
+
+		.label
+		{
+			margin-top: 8px;
+			font-size:  12px;
+		}
+
+		.divLine
+		{
+			width:      100%;
+			border:     0.5px solid #757575;
+			margin-top: 8px;
+		}
+
+		.selectedValue
+		{
+			font-size:     16px;
+			height:        16px;
+			padding:       0px;
+			width:         calc(100% - 24px);
+			margin-top:    8px;
+			display:       inline-block;
+			overflow:      hidden;
+			text-overflow: ellipsis;
+			white-space:   nowrap;
+		}
+
+		.selector
+		{
+			position: absolute;
+			float:    right;
+			display:  inline-block;
+			top:      2px;
+		}
+
+		:host([label]) .selector
+		{
+			top: 14px;
+		}
+
+		:host([label]) .values
+		{
+			top: 12px;
+		}
+
+		:host(:not([multiple])) .selected
+		{
+			color: rgba(0, 0, 0, 0.54);
+		}
+
+		.values
+		{
+			opacity:       0;
+			background:    white;
+			box-shadow:    0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+			border-radius: 2px;
+			top:           0px;
+			/*min-width:     170px;
+			max-width:     calc(100vw - 32px);*/
+			overflow-x:      hidden;
+			overflow-y:      auto;
+			white-space:   nowrap;
+			position:      absolute;
+			width:         100%;
+			max-height:    0px;
+			transition:    max-height 600ms;
+			z-index:       1;
+		}
+
+		.item
+		{
+			font-size:       1rem;
+			font-weight:     400;
+			letter-spacing:  0.04em;
+			line-height:     2.75rem;
+			text-decoration: inherit;
+			text-transform:  inherit;
+			height:          48px;
+			padding:         0 16px;
+			text-align:      left;
+			position:        relative;
+			white-space:     nowrap;
+			text-overflow:   ellipsis;
+			overflow:        hidden;
+		}
+
+		.item:before
+		{
+			position:      absolute;
+			top:           0;
+			left:          0;
+			width:         100%;
+			height:        100%;
+			transition:    opacity 120ms cubic-bezier(0, 0, 0.2, 1);
+			border-radius: inherit;
+			background:    currentColor;
+			content:       "";
+			opacity:       0;
+		}
+
+		.item:not(.selected):active:before, :host([multiple]) .item:active:before
+		{
+			opacity: .18;
+		}
+
+		.inputBox:hover
+		{
+			background-color: rgba(0, 0, 0, 0.06);
+		}
+
+		.inputBox:hover .divLine
+		{
+			border-color: #212121;
+		}
+
+		.inputBox:active + .values, .values:hover
+		{
+			opacity:    1;
+			max-height: 150px;
+		}
+
+	</style>
+	<div style = "position: relative;">
+		<div class = "label"></div>
+		<div class = "inputBox">
+			<span class = "selectedValue"></span>
+			<span class = "selector">
+				<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+					<path fill = "#6F6F6F" d = "M7,10L12,15L17,10H7Z" />
+				</svg>
+			</span>
+			<div class = "divLine"></div>
+		</div>
+		<div class = "values">
+		</div>
+	</div>
+</template>
+
+<template id = "item">
+	<div class = "item"></div>
+</template>
+
+<template id = "multipleItem">
+	<div class = "item" style = "line-height: initial;">
+		<span>
+			<material-check-box style = "display: inline-block;"></material-check-box>
+		</span>
+		<span style = "bottom: 2px; position: relative;"></span>
+	</div>
+</template>
