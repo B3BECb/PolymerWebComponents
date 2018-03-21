@@ -1,0 +1,66 @@
+<template id = "main">
+	<style>
+		:host /*(.darktheme)*/
+		{
+			font-family:    "Roboto";
+			font-size:      16px;
+			display:        block;
+			position:       relative;
+			width:          100%;
+			height:         auto;
+			vertical-align: top;
+			margin-top:     4px;
+			margin-bottom:  8px;
+		}
+
+		:host .item
+		{
+			position:         relative;
+			height:           48px;
+			background-color: #FFFFFF;
+			cursor:           move;
+			padding-left:     16px;
+			padding-right:    16px;
+		}
+
+		:host .item .text
+		{
+			position:       relative;
+			display:        inline-block;
+			vertical-align: top;
+			line-height:    3;
+			overflow:       hidden;
+			text-overflow:  ellipsis;
+			white-space:    nowrap;
+			max-width:          calc(100% - 56px);
+		}
+
+		:host .item .icon
+		{
+			float:  left;
+			width:  56px;
+			height: 100%;
+		}
+
+		:host .item .rightIcon
+		{
+			float:         right;
+			width:         24px;
+			height:        100%;
+			padding-left:  16px;
+			padding-right: 16px;
+		}
+	</style>
+	<div class = "items">
+
+	</div>
+</template>
+
+<template id = "item">
+	<div class = "item">
+		<span class = "icon"><material-check-box></material-check-box></span>
+		<span class = "text"></span>
+		<span class = "rightIcon"><dots-menu></dots-menu></span>
+	</div>
+</template>
+
