@@ -142,9 +142,10 @@
 			</dom-if>
 		</div>
 		<div class = "menuList">
-			<dom-repeat items = "{{items}}">
-				<template on-dom-change="_OnCustomIconLoaded">
-					<div 	on-click="_fireCallback"
+			<dom-repeat items = "{{items}}" id="repeater">
+				<template>
+					<div 	id="item[index]"
+							on-click="_fireCallback"
 							callback="{{item.callback}}"
 							class = "item">
 						<span class = "icon">
@@ -187,7 +188,7 @@
 									</span>
 								</template>
 							</dom-if>
-							<dom-if if = "{{item.type.custom}}" on-dom-change="_OnCustomIconLoaded">
+							<dom-if if = "{{item.type.custom}}">
 								<template>
 									<span 	id="customIcon[[index]]"
 											icon = {{item.icon}}
