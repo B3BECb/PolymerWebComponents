@@ -150,9 +150,9 @@
 
 		</style>
 		<div style = "position: relative;">
-			<div class = "label"></div>
+			<div class = "label">{{label}}</div>
 			<div class = "inputBox">
-				<span class = "selectedValue"></span>
+				<span class = "selectedValue">{{selectedValue}}</span>
 				<span class = "selector">
 				<svg style = "width:24px;height:24px"
 					 viewBox = "0 0 24 24">
@@ -162,21 +162,28 @@
 			</span>
 				<div class = "divLine"></div>
 			</div>
-			<div class = "values" id="test">
+			<div class = "values"
+				 id = "repeater">
 				<dom-repeat items = "{{items}}">
 					<template>
 						<dom-if if = "[[!multiple]]">
 							<template>
-								<div class = "item">{{item.value}}</div>
+								<div class$ = "{{item.selected}}"
+									 data-index$ = "[[index]]"
+									 on-click = "_valueSelected">
+									{{item.value}}
+								</div>
 							</template>
 						</dom-if>
 						<dom-if if = "[[multiple]]">
 							<template>
-								<div class = "item"
+								<div class$ = "{{item.selected}}"
+									 data-index$ = "[[index]]"
+									 on-click = "_valueSelected"
 									 style = "line-height: initial;">
-								<span>
-									<material-check-box style = "display: inline-block;"></material-check-box>
-								</span>
+									<span>
+										<material-check-box checked="{{item.checked}}" style = "display: inline-block;"></material-check-box>
+									</span>
 									<span style = "bottom: 2px; position: relative;">{{item.value}}</span>
 								</div>
 							</template>
