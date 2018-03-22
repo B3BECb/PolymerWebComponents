@@ -18,12 +18,19 @@ class DotsMenu
 	constructor()
 	{
 		super();
+
+		this.dots = !this.hasAttribute('settings');
 	}
 
 	static get properties()
 	{
 		return {
-			settings: Boolean,
+			settings:
+				{
+					type : Boolean,
+					value: false,
+				},
+			dots: Boolean,
 			disabled: Boolean,
 			items   : {
 				value()

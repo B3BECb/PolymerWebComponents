@@ -31,6 +31,15 @@
     padding-right: 31px;">
 	<dots-menu settings = "12"></dots-menu>
 </div>
+<div
+		style = "position: relative;
+    width: 200px;
+    display: flex;
+    flex-direction: row-reverse;
+    height: 48px;
+    padding-right: 31px;">
+	<dots-menu></dots-menu>
+</div>
 <material-combo-box
 		multiple
 		style = "width: 200px">
@@ -38,6 +47,7 @@
 	<span selected>.xml</span>
 	<span selected>.odt</span>
 </material-combo-box>
+<item-list></item-list>
 </body>
 <script type = "text/javascript">
 
@@ -56,6 +66,7 @@
 			  .RegisterScript("PolymerPaginator/PolymerPaginator.js")
 			  .RegisterScript("PolymerDotsMenu/PolymerDotsMenu.js")
 			  .RegisterScript("PolymerComboBox/PolymerComboBox.js")
+			  .RegisterScript("PolymerItemList/PolymerItemList.js")
 			  .Build();
 
 		//alert('грузим polymer компоненты');
