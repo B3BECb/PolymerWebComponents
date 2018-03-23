@@ -1,0 +1,289 @@
+<template id = "main">
+	<style>
+		@font-face
+		{
+			font-family: "Roboto";
+			src:         url("../../fonts/Roboto/Roboto-Regular.ttf");
+		}
+
+		@font-face
+		{
+			font-family: "Roboto Medium";
+			src:         url("../fonts/Roboto/Roboto-Medium.ttf");
+		}
+
+		:host
+		{
+			font-family: "Roboto";
+			display:     block;
+			min-width:   200px;
+		}
+
+		.icon
+		{
+			position: relative;
+			display:  inline-block;
+			top:      10px;
+			cursor:   pointer;
+		}
+
+		.icon.reset
+		{
+			display: none;
+		}
+
+		:host([filterActive]) .icon.reset
+		{
+			display: inline-block;
+		}
+
+		.rightIconsContainer
+		{
+			float: right;
+		}
+
+		.rightIconsContainer .icon
+		{
+			margin-left: 8px;
+			margin-right: 8px;
+		}
+
+		.rightIconsContainer .icon:first-child
+		{
+			margin-left: 0;
+		}
+
+		.rightIconsContainer .icon:last-child
+		{
+			margin-right: 0;
+		}
+
+		.icon .imageContainer:before, .icon .imageContainer:after
+		{
+			background-color: rgba(3, 155, 229, 0.55);
+			position:         absolute;
+			top:              -11px;
+			right:            -12px;
+			width:            48px;
+			height:           48px;
+			transition:       opacity 250ms linear;
+			border-radius:    50%;
+			opacity:          0;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		.icon:active .imageContainer:after, .icon:hover .imageContainer:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		.filterWindow
+		{
+			display:    none;
+			position:   absolute;
+			box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+			background: #FFFFFF;
+			width:      100%;
+			left:       0px;
+		}
+
+		:host([filterActive]) .filterWindow
+		{
+			width: calc(100% - 4px);
+			border: 2px solid #FF7043;
+			border-top: none;
+		}
+
+		.inputBox
+		{
+			padding-left:  16px;
+			padding-right: 16px;
+			background:    rgba(0, 0, 0, 0.04);
+			border:        1px solid rgba(0, 0, 0, 0);
+			border-radius: 4px;
+		}
+
+		.inputBox[focused], :host([filterActive]) .inputBox[focused]
+		{
+			background: #FFFFFF;
+			border:     2px solid rgba(66, 133, 244, 0.9);
+		}
+
+		:host([filterActive]) .inputBox
+		{
+			border:     2px solid #FF8A65;
+		}
+
+		.searchField
+		{
+			padding:    11px 16px;
+			background: transparent;
+			outline:    none;
+			font:       normal 16px Roboto;
+			box-sizing: border-box;
+			border:     none;
+			width:      calc(100% - 48px - 48px);
+			height:     46px;
+		}
+
+		.filtersContent
+		{
+			padding-top: 16px;
+		}
+
+		.filterButtons
+		{
+			margin-top:  24px;
+			padding:     8px 8px 8px 0px;
+			height:      36px;
+			font-family: "Roboto Medium";
+			font-size:   14px;
+			/*align-items: center;
+			display: flex;*/
+		}
+
+		.button
+		{
+			margin-left:   8px;
+			height:        100%;
+			min-width:     64px;
+			padding-left:  8px;
+			padding-right: 8px;
+			float:         right;
+			border-radius: 2px;
+			position:      relative;
+			cursor:        pointer;
+		}
+
+		.button.blue
+		{
+			background: rgba(66, 133, 244, 0.9);
+			color:      white;
+		}
+
+		.button .text
+		{
+			margin-top:   12px;
+			margin-right: 8px;
+			margin-left:  8px;
+			display:      block;
+			text-align:   center;
+		}
+
+		.button .text:before, .button .text:after
+		{
+			background-color: rgba(33, 33, 33, 0.14);
+			position:         absolute;
+			top:              0;
+			right:            0px;
+			width:            100%;
+			height:           100%;
+			transition:       opacity 250ms linear;
+			opacity:          0;
+			border-radius:    2px;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		.button:active .text:after, .button:hover .text:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		.filterItem
+		{
+			margin-bottom: 0;
+			padding:       0 24px;
+			height:        56px;
+		}
+
+		.filterItem .title
+		{
+			color:         rgba(0, 0, 0, .54);
+			width:         30%;
+			display:       inline-block;
+			margin-right:  10px;
+			outline:       none;
+			overflow:      hidden;
+			text-overflow: ellipsis;
+			white-space:   nowrap;
+		}
+
+		.filterItem .content
+		{
+			width:   60%;
+			display: inline-block;
+		}
+
+		@media (max-width:700px) and (orientation: portrait)
+		{
+			.filtersContent
+			{
+				overflow-y: auto;
+			}
+		}
+	</style>
+	<div style = "position: relative;">
+		<div class = "inputBox">
+			<span class = "icon" style = "float: left;"
+				  onclick = "this.parentElement.querySelector('.filterWindow').style.display = null;">
+				<span class = "imageContainer">
+					<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+						<path fill = "#6F6F6F"
+							  d = "M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,
+							  14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,
+							  16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,
+							  14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+					</svg>
+				</span>
+			</span>
+			<input class = "searchField" placeholder = "<%= Locale.Pages.Journal.Tabs.SearchTab.Title %>"
+				   onclick = "this.parentElement.querySelector('.filterWindow').style.display = null;"
+				   onfocus = "this.parentElement.setAttribute('focused', '');"
+				   onfocusout = "this.parentElement.removeAttribute('focused');">
+			<span class="rightIconsContainer">
+				<span class = "icon reset">
+					<span class = "imageContainer">
+						<svg style="width:24px;height:24px" viewBox="0 0 24 24">
+							<path fill="#6F6F6F" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+						</svg>
+					</span>
+				</span>
+				<span class = "icon"
+					  onclick = "this.parentElement.parentElement.querySelector('.filterWindow').style.display =
+					  this.parentElement.parentElement.querySelector('.filterWindow').style.display ? null : 'block';">
+					<span class = "imageContainer">
+						<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+							<path fill = "#6F6F6F" d = "M7,10L12,15L17,10H7Z" />
+						</svg>
+					</span>
+				</span>
+			</span>
+			<div class = "filterWindow">
+				<div class = "filtersContent">
+
+				</div>
+				<div class = "filterButtons">
+					<span class = "button blue"
+						  onclick = "this.parentElement.parentElement.style.display = null;">
+						<span class = "text"><%= Locale.Pages.Journal.Tabs.SearchTab.Buttons.Search %></span>
+					</span>
+					<span class = "button"
+						  onclick = "this.parentElement.parentElement.style.display = null;">
+						<span class = "text"><%= Locale.Pages.Journal.Tabs.SearchTab.Buttons.Cancel %></span>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template id = "item">
+	<div class = "filterItem">
+		<div class = "title"></div>
+		<div class = "content"></div>
+	</div>
+</template>
