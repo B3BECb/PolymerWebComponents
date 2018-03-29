@@ -34,10 +34,12 @@ class FiltrableSearchInput
 		var cancelBtn = this.$.searchContainer.querySelector('.button:not(.blue)');
 		var input = this.$.searchContainer.querySelector('input');
 
-		applyBtn.querySelector('.text').textContent = 'ПОИСК';//Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Buttons.Search');
-		cancelBtn.querySelector('.text').textContent = 'ОТМЕНА';//Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Buttons.Cancel');
+		applyBtn.querySelector('.text').textContent = 'ПОИСК';
+		Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Buttons.Search');
+		cancelBtn.querySelector('.text').textContent = 'ОТМЕНА';
+		Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Buttons.Cancel');
 		input.setAttribute('placeholder', 'Поиск по журалу',
-			/*Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Title')*/);
+			Localizer.GetLocalizedString('Locale.Pages.Journal.Tabs.SearchTab.Title'));
 
 		applyBtn.addEventListener('click', () => this.dispatchEvent(new CustomEvent("search")));
 		this.$.searchContainer.querySelector('.icon')

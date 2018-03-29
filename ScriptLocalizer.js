@@ -116,3 +116,5 @@ class LocalizableString
 		this.Value = string;
 	}
 }
+
+Localizer = new ScriptLocalizer();

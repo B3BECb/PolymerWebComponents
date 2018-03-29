@@ -1,0 +1,430 @@
+<template id = "main">
+	<style>
+		@font-face
+		{
+			font-family: "Roboto";
+			src:         url("../../fonts/Roboto/Roboto-Regular.ttf");
+		}
+
+		:host
+		{
+			font-family: "Roboto";
+			min-width:   400px;
+			display:     block;
+		}
+
+		.tableContainer
+		{
+			box-shadow:       0 1px 3px 0 rgba(0, 0, 0, .2), 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .12);
+			position:         relative;
+			overflow:         visible;
+			font-size:        15px;
+			color:            rgba(0, 0, 0, 0.87);
+			background-color: rgb(255, 255, 255);
+			padding-left:     24px;
+			padding-right:    14px;
+			height:           100%;
+		}
+
+		.icon, .dotsMenuContainer
+		{
+			float: right;
+		}
+
+		:host([rowSelected]) .dotsMenuContainer
+		{
+			display:       block !important;
+			position:      relative;
+			width:         24px;
+			height:        48px;
+			padding-right: 31px;
+			margin-right:  -31px;
+			margin-left:   24px;
+			margin-top:    8px;
+		}
+
+		:host([multiselect]) .cardHeader
+		{
+			transition:          background 270ms 0ms cubic-bezier(0, 0, 0.2, 1);
+			background:          linear-gradient(to right, #90CAF9 50%, white 10%);
+			background-size:     200% 100%;
+			background-position: right bottom;
+			margin-left:         -24px;
+			margin-right:        -14px;
+			padding-left:        24px;
+			padding-right:       14px;
+		}
+
+		:host([rowSelected]) .cardHeader
+		{
+			background-position: 0px 100%;
+		}
+
+		.cardHeader
+		{
+			height:      64px;
+			font-size:   20px;
+			line-height: 4rem;
+		}
+
+		.cardHeader .text
+		{
+			max-width: 80%;
+			white-space: nowrap;
+			display: inline-block;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		table
+		{
+			text-align:      right;
+			white-space:     nowrap;
+			border-collapse: collapse;
+			width:           100%
+		}
+
+		th
+		{
+			font-size:     12px;
+			color:         #757575;
+			white-space:   nowrap;
+			position:      relative;
+			border-bottom: solid 1px #DDDDDD;
+			height:        56px;
+			padding:       0 24px 0 32px;
+		}
+
+		:host([multiselect]) th:first-child, :host([multiselect]) td:first-child
+		{
+			width:    18px;
+			position: relative;
+			z-index:  1;
+		}
+
+		:host([multiselect]) th:first-child span, :host([multiselect]) td:first-child span
+		{
+			position:    absolute;
+			display:     inline-block;
+			line-height: initial;
+			height:      46px;
+			margin:      -25px 0 0 -15px;
+			padding:     2px 0 0 17px;
+		}
+
+		:host([multiselect]) th:first-child + th, :host([multiselect]) td:first-child + td
+		{
+			padding:    0 24px 0 24px;;
+			text-align: left;
+		}
+
+		th:first-child, td:first-child
+		{
+			padding:    0 0 0 24px;
+			text-align: left;
+		}
+
+		td
+		{
+			border-bottom: solid 1px #DDDDDD;
+			height:        48px;
+			line-height:   48px;
+			padding:       0 24px 0 32px;
+			font-size:     13px;
+			font-weight:   600;
+		}
+
+		tr:hover td
+		{
+			background: #EEEEEE;
+		}
+
+		tr[selected] td
+		{
+			background: #F5F5F5;
+		}
+
+		.unpaginatarable tr:last-child td
+		{
+			border: none;
+		}
+
+		.icon .imageContainer:before, .icon .imageContainer:after
+		{
+			background-color: rgba(3, 155, 229, 0.55);
+			position:         absolute;
+			top:              -11px;
+			right:            -12px;
+			width:            48px;
+			height:           48px;
+			transition:       opacity 250ms linear;
+			border-radius:    50%;
+			opacity:          0;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		.icon:active .imageContainer:after, .icon:hover .imageContainer:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		.imageContainer
+		{
+			margin-top:  20px;
+			position:    relative;
+			width:       24px;
+			height:      24px;
+			line-height: initial;
+		}
+
+		.tableMenu[hidden], th[hidden], td[hidden]
+		{
+			display: none;
+		}
+
+		.tableMenu
+		{
+			position:         absolute;
+			z-index:          1;
+			width:            250px;
+			text-align:       initial;
+			right:            8px;
+			box-shadow:       0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+			background-color: rgb(255, 255, 255);
+			color:            rgba(0, 0, 0, .87);
+			font-size:        14px;
+			font-weight:      400;
+			letter-spacing:   .010em;
+			line-height:      20px;
+		}
+
+		.tableMenu .headerLine
+		{
+			padding-top: 16px;
+		}
+
+		.caption
+		{
+			color:     #757575;
+			font-size: 16px;
+		}
+
+		.listControls
+		{
+			font-size: 12px;
+		}
+
+		.listControls .controlLink
+		{
+			cursor: pointer;
+			color:  #1565C0;
+		}
+
+		.controlLink:active
+		{
+			color: #F44336;
+		}
+
+		.controlLink[blocked]
+		{
+			cursor: default;
+			color:  #9E9E9E;
+		}
+
+		.fieldsList
+		{
+			padding:       8px 16px 0 16px;
+			max-height:    200px;
+			overflow-y:    auto;
+			border-bottom: solid 1px #DDDDDD;
+		}
+
+		.buttons
+		{
+			font-family: "Roboto Medium";
+			position:    relative;
+			height:      36px;
+			padding:     8px 8px 8px 0;
+			line-height: initial;
+		}
+
+		.button
+		{
+			margin-left:   8px;
+			height:        100%;
+			min-width:     64px;
+			padding-left:  8px;
+			padding-right: 8px;
+			float:         right;
+			border-radius: 2px;
+			position:      relative;
+			cursor:        pointer;
+		}
+
+		.button.blue
+		{
+			background: rgba(66, 133, 244, 0.9);
+			color:      white;
+		}
+
+		.button .text
+		{
+			margin-top:   10px;
+			margin-right: 8px;
+			margin-left:  8px;
+			display:      block;
+			text-align:   center;
+		}
+
+		.button .text:before, .button .text:after
+		{
+			background-color: rgba(33, 33, 33, 0.14);
+			position:         absolute;
+			top:              0;
+			right:            0px;
+			width:            100%;
+			height:           100%;
+			transition:       opacity 250ms linear;
+			opacity:          0;
+			border-radius:    2px;
+			pointer-events:   none;
+			content:          "";
+		}
+
+		.button:active .text:after, .button:hover .text:before
+		{
+			transition-duration: 85ms;
+			opacity:             .6;
+		}
+
+		.loading
+		{
+			opacity:      0;
+			height:       0;
+			background:   rgba(33, 150, 243, 0.5);
+			margin-left:  -24px;
+			margin-right: -14px;
+			transition:   opacity 0.2s linear, height 0.2s linear;
+			overflow:     hidden;
+		}
+
+		:host([loading]) .loading
+		{
+			opacity: 1;
+			height:  5px;
+		}
+
+		:host([loadError]) .loading
+		{
+			background: #F44336;
+		}
+
+		.step
+		{
+			height:     inherit;
+			position:   relative;
+			background: #2196F3;
+		}
+
+		:host([loadError]) .step
+		{
+			display: none;
+		}
+
+		:host(:not([loadError])) .step.indeterminate
+		{
+			animation: indeterminateLoad 1.8s linear infinite;
+		}
+
+		@keyframes indeterminateLoad
+		{
+			0%
+			{
+				width: 0;
+				left:  0;
+			}
+			50%
+			{
+				width: 40%;
+				left:  50%;
+			}
+			100%
+			{
+				width: 60%;
+				left:  100%;
+			}
+		}
+
+	</style>
+	<div class = "tableContainer">
+		<div class = "cardHeader">
+			<span class="text"></span>
+			<span class = "dotsMenuContainer" style = "display: none;">
+				<dots-menu style = "margin-top: -3px;"></dots-menu>
+			</span>
+			<span class = "icon">
+				<div class = "imageContainer"
+					 onclick = "var menu = this.parentElement.querySelector('.tableMenu');
+				if(menu.hasAttribute('hidden'))
+					menu.removeAttribute('hidden');
+				else menu.setAttribute('hidden', ''); ">
+					<svg style = "width:24px;height:24px" viewBox = "0 0 24 24">
+						<path fill = "#6F6F6F" d = "M12,15.5A3.5,3.5 0 0,1 8.5,
+						12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,
+						3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,
+						12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,
+						8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,
+						6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,
+						2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,
+						6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,
+						9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,
+						12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,
+						18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,
+						21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,
+						18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,
+						18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" />
+					</svg>
+				</div>
+				<div class = "tableMenu" hidden>
+					<div style = "padding-left: 16px;">
+						<div class = "headerLine caption">Locale.Components.DataTable.Menu.Columns</div>
+						<div class = "headerLine listControls" style = "padding-bottom: 8px;">
+							<span class = "controlLink" blocked onclick = "
+							var columnList = this.parentElement.parentElement.parentElement.querySelector('item-list');
+							columnList.CheckAll();
+							">Locale.Components.DataTable.Menu.SelectAll</span> - <span class = "controlLink"
+																						onclick = "
+							var columnList = this.parentElement.parentElement.parentElement.querySelector('item-list');
+							columnList.UncheckAll();
+							">Locale.Components.DataTable.Menu.ClearAll</span>
+						</div>
+					</div>
+					<div class = "fieldsList">
+						<item-list></item-list>
+					</div>
+					<div class = "buttons">
+						<span class = "button blue"
+							  onclick = "this.parentElement.parentElement.setAttribute('hidden', '');">
+						<span class = "text">Locale.Components.DataTable.Menu.Apply</span>
+						</span>
+						<span class = "button"
+							  onclick = "this.parentElement.parentElement.setAttribute('hidden', '');">
+							<span class = "text">Locale.Components.DataTable.Menu.Cancel</span>
+						</span>
+					</div>
+				</div>
+			</span>
+		</div>
+		<div class = "loading">
+			<div class = "step indeterminate"></div>
+		</div>
+		<div style = "margin-left: -24px; margin-right: -14px; overflow: auto; height: calc(100% - 64px);">
+			<table class = "unpaginatarable">
+			</table>
+
+		</div>
+		<!--<div>Pagination</div>-->
+	</div>
+</template>

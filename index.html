@@ -49,7 +49,8 @@
 </material-combo-box>
 <item-list></item-list>
 <filtrable-search-input id = "SearchInput"
-						style = "width: 45vw; position: relative; display: inline-block;"></filtrable-search-input>
+						style = "z-index: 2;width: 45vw; position: relative; display: inline-block;"></filtrable-search-input>
+<material-data-table id = "journalTable"></material-data-table>
 </body>
 <script type = "text/javascript">
 
@@ -62,6 +63,8 @@
 		window.Builder
 			  .EnableWebComponents()
 			  .RegisterHtmlTemplate("custom-element.html")
+			  .RegisterScript("CookieManager.js")
+			  .RegisterScript("ScriptLocalizer.js")
 			  .RegisterScript("PolymerValidableInput/PolymerValidableInput.js")
 			  .RegisterScript("PolymerCheckBox/PolymerCheckBox.js")
 			  .RegisterScript("PolymerMaterialSwitch/PolymerMaterialSwitch.js")
@@ -70,6 +73,7 @@
 			  .RegisterScript("PolymerComboBox/PolymerComboBox.js")
 			  .RegisterScript("PolymerItemList/PolymerItemList.js")
 			  .RegisterScript("PolymerFiltrableSearchInput/PolymerFiltrableSearchInput.js")
+			  .RegisterScript("PolymerDataTable/PolymerDataTable.js")
 			  .Build()
 			  .AfterAll(() => Initialize());
 
@@ -84,6 +88,16 @@
 	function Initialize()
 	{
 		InitializeSearchFilters();
+		ConfigureTable();
+
+		let data = [
+			['as33f1', 'up', 'dir 1', 1354461],
+			['hg63jf', 'down', 'dir 2', 12312],
+			['jhj8jg', 'down', 'dir 1', 23521],
+			['pf95ys', 'up', 'dir 3', 4567542],
+		];
+
+		FillJournalTable(data);
 	}
 
 	function InitializeSearchFilters()
@@ -197,6 +211,61 @@
 			});
 	}
 
+	function ConfigureTable()
+	{
+		var columns = [];
+
+		columns.push(new TableColumn('direction', 'direction',
+			null, true));
+		columns.push(
+			new TableColumn('directionName', 'directionName',
+				null, true));
+		columns.push(
+			new TableColumn('col2', 'col 2',
+				null, true));
+
+
+		var headerSwitch = document.createElement('span');
+		headerSwitch.style.display = 'flex';
+		headerSwitch.style.alignItems = 'center';
+
+		checkAutoUpdate = document.createElement('material-switch');
+		checkAutoUpdate.style.display = 'inline-block';
+		checkAutoUpdate.style.marginTop = '5px';
+		checkAutoUpdate.style.marginLeft = '15px';
+		checkAutoUpdate.style.marginRight = '15px';
+		checkAutoUpdate.checked = true;
+
+		var label = document.createElement('span');
+		label.textContent = 'refresh switcher';
+
+		headerSwitch.appendChild(label);
+		headerSwitch.appendChild(checkAutoUpdate);
+
+		var tableConfig = new TableConfiguration(headerSwitch,
+			new TableColumn('plate', 'plate', null, true), columns);
+		journalTable.Configuration = tableConfig;
+	}
+
+	function FillJournalTable(data)
+	{
+		if(!data) return;
+
+		journalTable.Clear();
+
+		data.forEach(
+			(entrie, index) =>
+			{
+				var fieldsValues = [];
+				fieldsValues.push(new TableValue('plate', entrie[0]));
+				fieldsValues.push(new TableValue('direction', entrie[1]));
+				fieldsValues.push(new TableValue('directionName', entrie[2]));
+				fieldsValues.push(new TableValue('col2', entrie[3]));
+
+				var tr = journalTable.AddRow(fieldsValues);
+				tr.dataset.id = entrie[index];
+			});
+	}
 
 </script>
 </html>
