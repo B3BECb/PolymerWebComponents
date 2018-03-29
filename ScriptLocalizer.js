@@ -1,5 +1,3 @@
-Builder
-	.RegisterScript('js/shared/Verify.js', () => window.Localizer = new ScriptLocalizer());
 
 class ScriptLocalizer
 {
@@ -58,7 +56,7 @@ class ScriptLocalizer
 
 	GetLocalizedString(stringId, defaultSting = null)
 	{
-		Verify.Argument.IsNotNull(stringId, "ScriptLocalizer.GetLocalizedString.stringId is null");
+		//Verify.Argument.IsNotNull(stringId, "ScriptLocalizer.GetLocalizedString.stringId is null");
 
 		var language = CookieManager.getCookie("language");
 		language     = (language) ? language : this.DEFAULTLANGUAGE;
@@ -85,7 +83,7 @@ class Language
 	{
 		this._strings = [];
 
-		Verify.Argument.IsNotNull(id, "Language.constructor.id is null");
+		//Verify.Argument.IsNotNull(id, "Language.constructor.id is null");
 
 		this.Id = id;
 	}
@@ -111,8 +109,8 @@ class LocalizableString
 {
 	constructor(id, string)
 	{
-		Verify.Argument.IsNotNull(id, "LocalizableString.constructor.id is null");
-		Verify.Argument.IsNotNull(string, "LocalizableString.constructor.string is null");
+		//Verify.Argument.IsNotNull(id, "LocalizableString.constructor.id is null");
+		//Verify.Argument.IsNotNull(string, "LocalizableString.constructor.string is null");
 
 		this.Id    = id;
 		this.Value = string;

@@ -19,35 +19,22 @@ class MaterialComboBox
 	constructor()
 	{
 		super();
+	}
+
+	ready()
+	{
+		super.ready();
 
 		var domItems = this.querySelectorAll("span");
-		this.selectedValue = "";
+		var items    = [];
 		if(domItems)
 		{
-			domItems.forEach((s, index, array) =>
+			domItems.forEach(s =>
 			{
-				let selected = s.hasAttribute('selected');
-				this.push('items', {
-					selected: selected ? 'item selected' : 'item',
-					value   : s.textContent,
-					checked : selected ? true : false,
+				items.push({
+					selected: s.hasAttribute('selected'),
+					text:     s.textContent,
 				});
-
-				if(selected)
-				{
-					if(!this.hasAttribute('multiple'))
-					{
-						this.selectedValue = s.textContent;
-					}
-					else
-					{
-						this.selectedValue += s.textContent;
-						if(index != array.length - 1)
-						{
-							this.selectedValue += ', ';
-						}
-					}
-				}
 			});
 
 			while(this.firstChild)
@@ -55,132 +42,126 @@ class MaterialComboBox
 				this.removeChild(this.firstChild);
 			}
 		}
-	}
 
-	static get properties()
-	{
-		return {
-			items        : {
-				value()
+		this.$.contentRoot.querySelector(
+			".selectedValue").textContent = this.Placeholder;
+		this.$.contentRoot.querySelector(
+			".label").textContent         = this.Label;
+
+		if(items.length)
+			items.forEach(
+				(element, index) =>
 				{
-					return [];
-				},
-			},
-			multiple     :
-				{
-					type : Boolean,
-					value: false,
-				},
-			label        : String,
-			selectedValue: String,
-			placeholder  : String,
-		};
-	}
-
-	_valueSelected(args)
-	{
-		let item = args.currentTarget;
-		if(!this.multiple)
-		{
-			if(item.classList.contains('selected'))
-			{
-				return;
-			}
-
-			this.selectedValue = item.textContent;
-			this.$.repeater.querySelectorAll(".item")
-				.forEach(
-					(currentItem) => currentItem.classList.remove('selected'),
-				);
-		}
-		item.classList.toggle('selected');
-
-		if(this.multiple)
-		{
-			var selected = this.$.repeater.querySelectorAll(".item.selected");
-			if(selected.length)
-			{
-				this.selectedValue = "";
-			}
-			else
-			{
-				this.selectedValue = this.placeholder;
-			}
-
-			selected
-			.forEach(
-				(currentItem, index, array) =>
-				{
-					this.selectedValue += currentItem.children[1].textContent;
-					if(index != array.length - 1)
-					{
-						this.selectedValue += ', ';
-					}
+					var added     = this.Add(element.text);
+					if(element.selected)
+						this._SelectItem(index);
 				},
 			);
-
-			var cmbx = item.children[0].children[0];
-
-			cmbx.checked = !cmbx.checked;
+	}
+	
+	Add(text)
+	{
+		var content = null;
+		if(this.Multiple)
+		{
+			content                                              = MaterialComboBox.Link.import.querySelector(
+				"template#multipleItem").content;
+			content.querySelector("div").children[1].textContent = text;
+		}
+		else
+		{
+			content                                  = MaterialComboBox.Link.import.querySelector(
+				"template#item").content;
+			content.querySelector("div").textContent = text;
 		}
 
-		var eventArgs =
-				{
-					detail:
-						{
-							item         : item,
-							itemIndex    : Number.parseInt(item.dataset.index),
-							selectedItems: this.multiple ? this.SelectedItem : item,
-						},
-				};
+		this.$.contentRoot.querySelector(".values")
+			.appendChild(content.cloneNode(true));
 
-		this.dispatchEvent(new CustomEvent("itemSelected", eventArgs));
-	}
+		var item      = this.$.contentRoot.querySelectorAll(".item");
+		var itemIndex = item.length - 1;
+		item          = item[itemIndex];
 
-	async Add(value)
-	{
-		await new Promise((resolve, reject) =>
+		item.addEventListener('click', () =>
+		{
+			var selectedValue = this.$.contentRoot.querySelector(
+				".selectedValue");
+
+			if(!this.Multiple)
 			{
-				var waitEvent = (args) =>
-				{
-					this.$.repeater.removeEventListener('dom-change', waitEvent);
-					resolve();
-				};
+				if(item.classList.contains('selected'))
+					return;
 
-				this.$.repeater.addEventListener('dom-change', waitEvent);
+				selectedValue.textContent = item.textContent;
+				this.$.contentRoot.querySelectorAll(".item")
+					.forEach(
+						(currentItem) => currentItem.classList.remove('selected'),
+					);
+			}
+			item.classList.toggle('selected');
 
-				this.push('items', {
-					value   : value,
-					selected: 'item',
-				});
-			},
-		);
+			if(this.Multiple)
+			{
+				var selected = this.$.contentRoot.querySelectorAll(".item.selected");
+				if(selected.length)
+					selectedValue.textContent = "";
+				else
+					selectedValue.textContent = this.Placeholder;
 
-		let item = Polymer.dom(this.root).querySelectorAll('.item')[this.items.length - 1];
+				selected
+				.forEach(
+					(currentItem, index, array) =>
+					{
+						selectedValue.textContent += currentItem.children[1].textContent;
+						if(index != array.length - 1)
+							selectedValue.textContent += ', ';
+					},
+				);
+
+				var cmbx = item.children[0].children[0];
+
+				cmbx.checked = !cmbx.checked;
+			}
+
+			var eventArgs =
+					{
+						detail:
+							{
+								item:          item,
+								itemIndex:     itemIndex,
+								selectedItems: this.Multiple ? this.SelectedItem : item,
+							},
+					};
+
+			this.dispatchEvent(new CustomEvent("itemSelected", eventArgs));
+		});
 
 		return item;
 	}
 
 	Clear()
 	{
-		this.items = [];
+		var values = this.$.contentRoot.querySelector(".values");
 
-		this.selectedValue = this.placeholder;
+		if(!values.firstChild) return;
+
+		while(values.firstChild)
+		{
+			values.removeChild(values.firstChild);
+		}
+
+		this.$.contentRoot.querySelector(".selectedValue").textContent = this.Placeholder;
 	}
 
 	_SelectItem(index)
 	{
-		var items = this.$.repeater.querySelectorAll(".item");
+		var items = this.$.contentRoot.querySelectorAll(".item");
 		if(items.length < index)
-		{
 			throw 'Index out of range';
-		}
 		if(items[index].classList.contains('selected'))
-		{
 			return;
-		}
 
-		this.selectedValue = items[index].textContent;
+		this.$.contentRoot.querySelector(".selectedValue").textContent = items[index].textContent;
 		items
 		.forEach(
 			(currentItem) => currentItem.classList.remove('selected'),
@@ -190,7 +171,7 @@ class MaterialComboBox
 
 	get Items()
 	{
-		return this.$.repeater.querySelectorAll(".item");
+		return this.$.contentRoot.querySelectorAll(".item");
 	}
 
 	set Items(value)
@@ -200,12 +181,10 @@ class MaterialComboBox
 
 	get SelectedItem()
 	{
-		if(this.multiple)
-		{
-			return this.$.repeater.querySelectorAll(".selected");
-		}
+		if(this.Multiple)
+			return this.$.contentRoot.querySelectorAll(".selected");
 
-		return this.$.repeater.querySelector(".selected");
+		return this.$.contentRoot.querySelector(".selected");
 	}
 
 	set SelectedItem(index)
@@ -215,40 +194,39 @@ class MaterialComboBox
 
 	get Multiple()
 	{
-		return this.multiple;
+		return this.hasAttribute("multiple");
 	}
 
 	set Multiple(value)
 	{
 		if(value)
-		{
-			this.multiple = true;
-		}
+			this.setAttribute("multiple", "");
 		else
-		{
-			this.multiple = false;
-		}
+			this.removeAttribute("multiple");
 	}
 
 	get Placeholder()
 	{
-		return this.placeholder;
+		return this.getAttribute("placeholder");
 	}
 
 	set Placeholder(value)
 	{
-		this.placeholder = value;
-		this.selectedValue = value;
+		this.setAttribute("placeholder", value);
+		this.$.contentRoot.querySelector(
+			".selectedValue").textContent = value;
 	}
 
 	get Label()
 	{
-		return this.label;
+		return this.getAttribute("label");
 	}
 
 	set Label(value)
 	{
-		this.label = value;
+		this.setAttribute("label", value);
+		this.$.contentRoot.querySelector(
+			".label").textContent = value;
 	}
 
 	get error()
@@ -259,12 +237,8 @@ class MaterialComboBox
 	set error(value)
 	{
 		if(value)
-		{
 			this.setAttribute("error", "");
-		}
 		else
-		{
 			this.removeAttribute("error");
-		}
 	}
 }

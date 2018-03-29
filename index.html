@@ -48,7 +48,8 @@
 	<span selected>.odt</span>
 </material-combo-box>
 <item-list></item-list>
-<filtrable-search-input></filtrable-search-input>
+<filtrable-search-input id = "SearchInput"
+						style = "width: 45vw; position: relative; display: inline-block;"></filtrable-search-input>
 </body>
 <script type = "text/javascript">
 
@@ -69,7 +70,8 @@
 			  .RegisterScript("PolymerComboBox/PolymerComboBox.js")
 			  .RegisterScript("PolymerItemList/PolymerItemList.js")
 			  .RegisterScript("PolymerFiltrableSearchInput/PolymerFiltrableSearchInput.js")
-			  .Build();
+			  .Build()
+			  .AfterAll(() => Initialize());
 
 		//alert('грузим polymer компоненты');
 	}
@@ -78,6 +80,122 @@
 	{
 		console.log(args.detail);
 	});
+
+	function Initialize()
+	{
+		InitializeSearchFilters();
+	}
+
+	function InitializeSearchFilters()
+	{
+		var component = document.createElement('material-combo-box');
+		component.style.width = '100%';
+		var created = SearchInput.Add('Статусы',
+			component)
+								 .querySelector('material-combo-box');
+		var element = created.Add('все');
+		element.dataset.id = null;
+		if(!created.SelectedItem)
+		{
+			element.click();
+		}
+		element = created.Add(
+			'распознан');
+		element.dataset.id = 'recognized';
+		element = created.Add(
+			'не распознан');
+		element.dataset.id = 'unrecognized';
+		element = created.Add('вручную');
+		element.dataset.id = 'manual';
+
+		created.addEventListener('itemSelected',
+			(eventArgs) =>
+			{
+				console.log("status selected");
+			});
+		var statusesCmbx = created;
+
+		component = document.createElement('material-combo-box');
+		component.style.width = '100%';
+		created = SearchInput.Add('directions',
+			component)
+							 .querySelector('material-combo-box');
+		element = created.Add('all');
+		element.dataset.id = null;
+		if(!created.SelectedItem)
+		{
+			element.click();
+		}
+		element = created.Add('up');
+		element.dataset.id = 'up';
+		element = created.Add('down');
+		element.dataset.id = 'down';
+		element = created.Add('undefined');
+		element.dataset.id = 'undefined';
+
+		created.addEventListener('itemSelected',
+			(eventArgs) =>
+			{
+				console.log("direction selected");
+			});
+		var directionsCmbx = created;
+
+		SearchInput.addEventListener('search', () => console.log('onSearch'));
+		SearchInput.addEventListener('valueChanged', (eventArgs) =>
+		{
+			console.log('Value is: ' + eventArgs.detail);
+		});
+
+		var appendInlineStyle =
+				(element) =>
+				{
+					element.style.outline = "none";
+					element.style.border = "none";
+					element.style.borderBottom = "0.5px solid #757575";
+					element.style.fontSize = "16px";
+					element.style.fontFamily = "roboto";
+					element.style.marginTop = "15px";
+					element.style.width = '100%';
+				};
+
+		var dateFromChanged =
+				(value) =>
+				{
+					console.log('Date from time is: ' + new Date(value).toJSON());
+				};
+		var component = document.createElement('input');
+		component.setAttribute('type', 'datetime-local');
+		component.addEventListener('input', function()
+		{
+			dateFromChanged(this.value);
+		});
+		appendInlineStyle(component);
+		created = SearchInput.Add('from', component)
+							 .querySelector('material-combo-box');
+		var dateFrom = SearchInput.FilterComponents[SearchInput.FilterComponents.length - 1].firstChild;
+
+		var dateToChanged =
+				(value) =>
+				{
+					console.log('Date to time is: ' + new Date(value).toJSON());
+				};
+		component = document.createElement('input');
+		component.setAttribute('type', 'datetime-local');
+		component.addEventListener('input', function()
+		{
+			dateToChanged(this.value);
+		});
+		appendInlineStyle(component);
+		created = SearchInput.Add('to', component)
+							 .querySelector('material-combo-box');
+		var dateTo = SearchInput.FilterComponents[SearchInput.FilterComponents.length - 1].firstChild;
+
+		SearchInput.addEventListener('filterReset',
+			() =>
+			{
+				console.log('filter reseted');
+			});
+	}
 
 
 </script>

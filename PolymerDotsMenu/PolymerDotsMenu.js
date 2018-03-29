@@ -18,83 +18,77 @@ class DotsMenu
 	constructor()
 	{
 		super();
-
-		this.dots = !this.hasAttribute('settings');
 	}
 
-	static get properties()
+	ready()
 	{
-		return {
-			settings:
-				{
-					type : Boolean,
-					value: false,
-				},
-			dots: Boolean,
-			disabled: Boolean,
-			items   : {
-				value()
-				{
-					return [];
-				},
-			},
-		};
-	}
+		super.ready();
 
-	_fireCallback(args)
-	{
-		if(args.currentTarget.callback)
+		if(this.hasAttribute("settings"))
 		{
-			args.currentTarget.callback();
+			let icon = DotsMenu.Link.import.querySelector('template#settingsIcon').content;
+			this.$.dotsContainer.appendChild(icon);
+		}
+		else
+		{
+			let icon = DotsMenu.Link.import.querySelector('template#dotsIcon').content;
+			this.$.dotsContainer.appendChild(icon);
 		}
 	}
 
-	async AddItem(value, callback = null, type = null)
+	AddItem(value, callback = null, type = null)
 	{
-		let text = value;
-		let icon;
-		if(Array.isArray(value))
+		var content = DotsMenu.Link.import.querySelector("template#item").content;
+
+		var menulist = this.$.menuList;
+		menulist.appendChild(content.cloneNode(true));
+
+		var item = menulist.querySelectorAll(".item");
+		item     = item[item.length - 1];
+
+		if(callback)
+			item.addEventListener('click', callback);
+
+		if(type)
 		{
-			text = value[0];
-			icon = value[1];
+			var template = DotsMenu.Link.import.querySelector("template#" + type)
+				.content;
+
+			if(Array.isArray(value))
+			{
+				item.querySelector(".text").textContent = value[0];
+				template.querySelector('span').appendChild(value[1]);
+			}
+			else
+			{
+				item.querySelector(".text").textContent = value;
+			}
+
+			item.querySelector(".icon")
+				.appendChild(template.cloneNode(true));
 		}
-
-		await
-			new Promise((resolve, reject) =>
-				{
-					var waitEvent = (args) =>
-					{
-						this.$.repeater.removeEventListener('dom-change', waitEvent);
-						resolve();
-					};
-
-					this.$.repeater.addEventListener('dom-change', waitEvent);
-
-					this.push('items', {
-						value   : text,
-						callback: callback,
-						type    :
-							{
-								remove    : type == "remove" ? true : false,
-								edit      : type == "edit" ? true : false,
-								switchView: type == "switchView" ? true : false,
-								custom    : type == "custom" ? true : false,
-							},
-						icon    : icon,
-					});
-				},
-			);
-
-		if(icon)
+		else
 		{
-			let iconElement = Polymer.dom(this.root).querySelector('#customIcon' + (this.items.length - 1));
-
-			iconElement.appendChild(iconElement.icon);
+			item.querySelector(".text").textContent = value;
 		}
-
-		let item = Polymer.dom(this.root).querySelector('#item' + (this.items.length - 1));
 
 		return item;
+	}
 
+	get disabled()
+	{
+		return this.hasAttribute("disabled");
+	}
+
+	set disabled(value)
+	{
+		if(value)
+		{
+			this.setAttribute("disabled", "");
+		}
+		else
+		{
+			this.removeAttribute("disabled");
+		}
 	}
 }
