@@ -51,8 +51,16 @@
 <filtrable-search-input id = "SearchInput"
 						style = "z-index: 2;width: 45vw; position: relative; display: inline-block;"></filtrable-search-input>
 <material-data-table id = "journalTable"></material-data-table>
+<video-player class="stub"
+			  style = "width: 600px; height: 300px"></video-player>
+<video-player id = "test"
+			  style = "width: 600px; height: 300px"></video-player>
 </body>
 <script type = "text/javascript">
+
+	var t = [
+		['Trigger 1', 'Trigger 2', 'Trigger 3'], ['id1', 'id2', 'id3'],
+	];
 
 	if(window.Builder.IsImportsSupports & 0)
 	{
@@ -74,6 +82,7 @@
 			  .RegisterScript("PolymerItemList/PolymerItemList.js")
 			  .RegisterScript("PolymerFiltrableSearchInput/PolymerFiltrableSearchInput.js")
 			  .RegisterScript("PolymerDataTable/PolymerDataTable.js")
+			  .RegisterScript("PolymerVideoplayer/PolymerVideoplayer.js")
 			  .Build()
 			  .AfterAll(() => Initialize());
 
@@ -98,6 +107,17 @@
 		];
 
 		FillJournalTable(data);
+
+		var configuration = new VideoplayerConfiguration(
+			'http://распознаваниеномеров.рф:5050/api/v1/image?videochannel=1', Videoplayer.Types().Image,
+			CreateLayers(),
+			'Camera 1 | Real', CreateTriggers());
+
+		BindEvents();
+
+		test.Configure(configuration);
+
+		test.Start();
 	}
 
 	function InitializeSearchFilters()
@@ -267,5 +287,159 @@
 			});
 	}
 
+	function BindEvents()
+	{
+		// trigger activation
+		test.addEventListener('triggerActivated',
+			(args) => console.log(`activated trigger: id=${args.detail.TriggerId} name=${args.detail.TriggerName}`));
+
+		// start/stop
+		test.addEventListener('playerStarted',
+			() => console.log("player started"));
+		test.addEventListener('playerStopped',
+			() => console.log("player stopped"));
+
+		// expand/collapse
+		test.addEventListener('playerExpanded',
+			() => console.log("player expanded"));
+		test.addEventListener('playerCollapsed',
+			() => console.log("player collapsed"));
+
+		//settings open/apply/abort/close/pageChanged
+		test.addEventListener('settingsOpened',
+			() => console.log("player settings oppened"));
+		test.addEventListener('settingsClosed',
+			() => console.log("player settings closed"));
+		test.addEventListener('settingsApplied',
+			(args) =>
+			{
+				console.log("player settings applied");
+				args.detail.CloseLayer();
+			});
+		test.addEventListener('settingsAborted',
+			(args) =>
+			{
+				console.log("player settings aborted");
+				args.detail.CloseLayer();
+			});
+		test.addEventListener('settingsPageChanged',
+			() => console.log("player settings page changed"));
+
+		//settings open/apply/abort/close/pageChanged
+		test.addEventListener('recognitionOpened',
+			() => console.log("player recognition oppened"));
+		test.addEventListener('recognitionClosed',
+			() => console.log("player recognition closed"));
+		test.addEventListener('recognitionApplied',
+			(args) =>
+			{
+				console.log("player recognition applied");
+				args.detail.CloseLayer();
+			});
+		test.addEventListener('recognitionAborted',
+			(args) =>
+			{
+				console.log("player recognition aborted");
+				args.detail.CloseLayer();
+			});
+		test.addEventListener('recognitionFrameShowed',
+			() => console.log("recognition frame showed"));
+		test.addEventListener('recognitionFormShowed',
+			() => console.log("recognition form showed"));
+		test.addEventListener('recognitionPageChanged',
+			() => console.log("player recognition page changed"));
+	}
+
+	function CreateTriggers()
+	{
+		var triggrs = [];
+
+		for(var i = 0; i < t[0].length; i++)
+		{
+			triggrs.push(new VideoplayerTrigger(t[0][i], t[1][i]));
+		}
+
+		return triggrs;
+	}
+
+	function CreateLayers()
+	{
+		var pages = [];
+
+		var templetePege = document.querySelector('#tp').content.cloneNode(true);
+		templetePege.querySelector('#mdSwitch').addEventListener('valueChanged', () => alert(1));
+		pages.push(new LayerPage('Triggers settings', templetePege));
+
+		templetePege = document.querySelector('#tp2').content.cloneNode(true);
+		templetePege.querySelector('#plate').addEventListener('valueChanged', (args) => console.info(args.detail));
+		pages.push(new LayerPage('test page 2', templetePege));
+
+		var settingsLayer = new VideoplayerLayer('Settings | Test player', pages);
+
+		var recogPages = [];
+
+		templetePege = document.querySelector('#recogTp').content.cloneNode(true);
+		templetePege.querySelector('#recogPlate').addEventListener('valueChanged', (args) => console.info(args.detail));
+		templetePege.querySelector('#langRusChkbx').addEventListener('change', (args) => console.info('lang Rus ' + args.target.checked));
+		templetePege.querySelector('#langEuChkbx').addEventListener('change', (args) => console.info('lang Eu ' + args.target.checked));
+		templetePege.querySelector('#langBoChkbx').addEventListener('change', (args) => console.info('lang Bo ' + args.target.checked));
+		templetePege.querySelector('#langFrChkbx').addEventListener('change', (args) => console.info('lang Fr ' + args.target.checked));
+		recogPages.push(new LayerPage('Plate', templetePege));
+
+		templetePege = document.querySelector('#recogTp2').content.cloneNode(true);
+		templetePege.querySelector('#UseDateTimeChkbx').addEventListener('change', (args) => console.info('Use datetime ' + args.target.checked));
+		templetePege.querySelector('#DateTimeInput').addEventListener('change', (args) => console.info('date time is ' + args.target.checked));
+		recogPages.push(new LayerPage('Date and time', templetePege));
+
+		var rocogLayer = new VideoplayerLayer('Recognition | Test player', recogPages);
+
+		var layers = new VideoplayerLayers(settingsLayer, rocogLayer);
+		return layers;
+	}
+
 </script>
+<template id = "tp">
+	<div style = "width: 200px;">
+		<div style = "display: flex; flex-direction: row; align-items: center;">
+			<span style = "margin-right: 8px;">Отображать триггеры</span>
+			<material-switch id = "mdSwitch"></material-switch>
+		</div>
+	</div>
+</template>
+<template id = "tp2">
+	<div style = "width: 200px;">
+		<validable-input id = "plate"
+						 title = "plate"
+						 noCollapse
+						 type = "text"
+						 style = "display: block; width: 200px;"></validable-input>
+	</div>
+</template>
+<template id = "recogTp">
+	<div style = "width: 200px;">
+		<validable-input id = "recogPlate"
+						 title = "plate"
+						 noCollapse
+						 type = "text"
+						 style = "display: block; width: 200px;"></validable-input>
+		<div>
+			RUS <input id="langRusChkbx" type="checkbox">
+		</div>
+		<div>
+			EU <input id="langEuChkbx" type="checkbox">
+		</div>
+		<div>
+			BO <input id="langBoChkbx" type="checkbox">
+		</div>
+		<div>
+			FR <input id="langFrChkbx" type="checkbox">
+		</div>
+	</div>
+</template>
+<template id = "recogTp2">
+	<div style = "width: 200px;">
+		Use custom Date and time <input id="UseDateTimeChkbx" type="checkbox">
+		<input id="DateTimeInput" type="datetime-local">
+	</div>
+</template>
 </html>
