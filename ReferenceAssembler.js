@@ -66,12 +66,20 @@
 		 * @constructor
 		 * @return {Builder}
 		 */
-		EnableWebComponents()
+		EnableWebComponents(forceOfficialRepository = false)
 		{
-			return this
-			//.RegisterScript("https://polygit.org/components/webcomponentsjs/webcomponents-loader.js")
-			.RegisterScript("webcomponents/webcomponents-loader.js")
-			.RegisterHtmlTemplate("https://polygit.org/components/polymer/polymer.html");
+			if(forceOfficialRepository)
+			{
+				return this
+					.RegisterScript("https://polygit.org/components/webcomponentsjs/webcomponents-loader.js")
+					.RegisterHtmlTemplate("https://polygit.org/components/polymer/polymer.html");
+			}
+			else
+			{
+				return this
+					.RegisterScript("webcomponents/webcomponents-loader.js")
+					.RegisterHtmlTemplate("polymer/polymer.html");
+			}
 		}
 
 		/**

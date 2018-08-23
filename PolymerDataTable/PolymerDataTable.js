@@ -1,11 +1,11 @@
 Builder
 	.RegisterScript("CookieManager.js")
 	.RegisterScript("ScriptLocalizer.js")
-	.RegisterScript("PolymerItemList/PolymerItemList.js")
-	.RegisterScript("PolymerDotsMenu/PolymerDotsMenu.js")
-	.RegisterScript("PolymerComboBox/PolymerComboBox.js")
-	.RegisterScript("PolymerDataTable/TableConfig.js")
-	.RegisterHtmlTemplate("PolymerDataTable/PolymerDataTableTemplate.html",
+	.RegisterScript("/PolymerItemList/PolymerItemList.js")
+	.RegisterScript("/PolymerDotsMenu/PolymerDotsMenu.js")
+	.RegisterScript("/PolymerComboBox/PolymerComboBox.js")
+	.RegisterScript("/PolymerDataTable/TableConfig.js")
+	.RegisterHtmlTemplate("/PolymerDataTable/PolymerDataTableTemplate.html",
 		(link) =>
 		{
 			DataTable.Link = document.querySelector('#' + link.ReferenceName);
