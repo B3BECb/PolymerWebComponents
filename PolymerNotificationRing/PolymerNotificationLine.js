@@ -83,9 +83,13 @@ class MaterialNotificationLine
 	set IsCollapsed(value)
 	{
 		if(value)
+		{
 			this.setAttribute("collapsed", "");
+		}
 		else
+		{
 			this.removeAttribute("collapsed");
+		}
 	}
 
 	/**
@@ -106,7 +110,7 @@ class MaterialNotificationLine
 	set Title(value)
 	{
 		this.$.notificationMessage.querySelector(".content .header").textContent = value;
-		this.$.notificationMessage.title = value;
+		this.$.notificationMessage.title                                         = value;
 	}
 
 	/**
@@ -170,7 +174,7 @@ class MaterialNotificationLine
 	 */
 	get Icon()
 	{
-		let iconBlock =  this.$.notificationMessage.querySelector(".icon");
+		let iconBlock = this.$.notificationMessage.querySelector(".icon");
 
 		//TODO: if icon == "" or null, hide icon block
 		if(iconBlock.firstChild)

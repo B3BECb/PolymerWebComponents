@@ -51,7 +51,7 @@ class MaterialNotificationRing
 			.addEventListener("click", args =>
 			{
 				//TODO: find better solution for edge css rendering issue
-				if (document.documentMode || /Edge/.test(navigator.userAgent))
+				if(document.documentMode || /Edge/.test(navigator.userAgent))
 				{
 					this.$.notificationRing
 						.querySelector(".notificationRing .notifications.control")
@@ -76,7 +76,7 @@ class MaterialNotificationRing
 				}
 
 				//TODO: find better solution for edge css rendering issue
-				if (document.documentMode || /Edge/.test(navigator.userAgent))
+				if(document.documentMode || /Edge/.test(navigator.userAgent))
 				{
 					this.$.notificationRing
 						.querySelector(".notificationRing .notifications.control")
@@ -134,7 +134,8 @@ class MaterialNotificationRing
 	 */
 	get Title()
 	{
-		return this.$.notificationRing.querySelector(".notificationRing .notifications.control .header .caption").textContent;
+		return this.$.notificationRing.querySelector(
+			".notificationRing .notifications.control .header .caption").textContent;
 	}
 
 	/**
@@ -143,7 +144,8 @@ class MaterialNotificationRing
 	 */
 	set Title(value)
 	{
-		this.$.notificationRing.querySelector(".notificationRing .notifications.control .header .caption").textContent = value;
+		this.$.notificationRing.querySelector(".notificationRing .notifications.control .header .caption").textContent =
+			value;
 	}
 
 	/**
@@ -239,7 +241,8 @@ class MaterialNotificationRing
 	 */
 	set Configuration(configurationNodes)
 	{
-		let content = this.$.notificationRing.querySelector(".notificationRing .notifications.control .settingsList.content");
+		let content = this.$.notificationRing.querySelector(
+			".notificationRing .notifications.control .settingsList.content");
 
 		this._RemoveAllChildNodes(content);
 
@@ -276,7 +279,8 @@ class MaterialNotificationRing
 	{
 		let notificationLine = document.createElement("material-notification-line");
 
-		this.$.notificationRing.querySelector(".notificationRing .notificationsList.content").appendChild(notificationLine);
+		this.$.notificationRing.querySelector(".notificationRing .notificationsList.content")
+			.appendChild(notificationLine);
 
 		notificationLine.Title    = title;
 		notificationLine.Message  = message;
