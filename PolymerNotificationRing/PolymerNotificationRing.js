@@ -50,6 +50,14 @@ class MaterialNotificationRing
 			.querySelector(".notificationRing .notifications.control .header .settings")
 			.addEventListener("click", args =>
 			{
+				//TODO: find better solution for edge css rendering issue
+				if (document.documentMode || /Edge/.test(navigator.userAgent))
+				{
+					this.$.notificationRing
+						.querySelector(".notificationRing .notifications.control")
+						.style.display = "none";
+				}
+
 				this.IsSettingsOpened = !this.IsSettingsOpened;
 
 				if(this.IsSettingsOpened)
@@ -65,6 +73,14 @@ class MaterialNotificationRing
 						{
 							detail: this,
 						}));
+				}
+
+				//TODO: find better solution for edge css rendering issue
+				if (document.documentMode || /Edge/.test(navigator.userAgent))
+				{
+					this.$.notificationRing
+						.querySelector(".notificationRing .notifications.control")
+						.style.display = "";
 				}
 			});
 
@@ -83,7 +99,7 @@ class MaterialNotificationRing
 
 	_SwitchCollapsing(args)
 	{
-		if(args.target !== this)
+		if(args.target !== this && args.target.localName !== MaterialNotificationLine.is)
 		{
 			this.IsCollapsed = !this.IsCollapsed;
 

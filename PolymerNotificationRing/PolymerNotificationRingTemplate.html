@@ -58,8 +58,8 @@
 				align-items:     center;
 				justify-content: center;
 
-				margin-top:      -16px;
-				margin-left:     16px;
+				right:           -12px;
+				top:             -8px;
 			}
 
 			.notificationRing .ring svg
@@ -285,7 +285,7 @@
 			{
 				.notificationRing .arrowUp
 				{
-					display: none;
+					display: none !important;
 				}
 
 				.notificationRing .notifications.control
@@ -312,7 +312,8 @@
 			}
 
 		</style>
-		<div id="notificationRing" class = "notificationRing">
+		<div id = "notificationRing"
+			 class = "notificationRing">
 			<div class = "ring">
 				<svg style = "width:24px;height:24px"
 					 viewBox = "0 0 24 24">
