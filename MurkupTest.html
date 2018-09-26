@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+	<meta name = "viewport"
+		  content = "width=device-width, initial-scale=1">
+	<meta name = "theme-color"
+		  content = "#db5945">
+	<script src = "ReferenceAssembler.js"
+			type = "text/javascript"></script>
+	<style>
+		@font-face
+		{
+			font-family: "Roboto";
+			src:         url("fonts/Roboto/Roboto-Regular.ttf");
+		}
+
+		@font-face
+		{
+			font-family: "Roboto Bold";
+			src:         url("fonts/Roboto/Roboto-Bold.ttf");
+		}
+	</style>
+</head>
+<body>
+<material-notification-line id="aa" style="display: none"></material-notification-line>
+<material-notification-ring id="rr" style="margin-left: 50vw"></material-notification-ring>
+</body>
+<script>
+	window.Builder
+		  .EnableWebComponents()
+		  .RegisterScript("PolymerNotificationRing/PolymerNotificationRing.js")
+		  .Build()
+		  .AfterAll(() => Initialize());
+
+	function Initialize()
+	{
+		rr.Title = "Уведомления";
+
+		rr.addEventListener("ringClicked", () => console.log("ringClicked"));
+		rr.addEventListener("ringNotificationsExpanded", () => console.log("ringNotificationsExpanded"));
+		rr.addEventListener("ringNotificationsCollapsed", () => console.log("ringNotificationsCollapsed"));
+		rr.addEventListener("settingsOpened", () => console.log("settingsOpened"));
+		rr.addEventListener("exitClicked", () => console.log("exitClicked"));
+
+		rr.AddNotification("aaaa", "bbbb");
+		rr.AddNotification("aaaa1", "bbbb");
+		rr.AddNotification("aaaa2", "bbbb");
+		rr.AddNotification("aaaa3", "bbbb");
+
+		rr.Configuration = [aaa.content.cloneNode(true),aaa.content.cloneNode(true),aaa.content.cloneNode(true)];
+
+		aa.addEventListener("messageClosed", () => console.log("messageClosed"));
+		aa.addEventListener("messageCollapsed", () => console.log("messageCollapsed"));
+		aa.addEventListener("messageExpanded", () => console.log("messageExpanded"));
+
+		aa.Title = "aaaaaa";
+		aa.Message = "bbbbbbb";
+		//aa.Icon = "url(https://scontent-lht6-1.cdninstagram.com/vp/aa0b4275660042b95bf676b5e05b9e2f/5BFA6E93/t51.2885-19/s150x150/23164677_1651279614935180_681656170808606720_n.jpg)";
+		aa.Icon = aaa.content.cloneNode(true);
+	}
+
+</script>
+
+<template id="aaa">
+	<svg style = "width:24px;height:24px"
+		 viewBox = "0 0 24 24">
+		<path fill = "#000000"
+			  d = "M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
+	</svg>
+</template>
+</html>

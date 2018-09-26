@@ -1,0 +1,210 @@
+<dom-module id = "material-notification-line">
+	<template id = "main">
+		<style>
+			:host
+			{
+				display: block;
+				width:   334px;
+			}
+
+			.notificationLine
+			{
+				display:             grid;
+				grid-template-areas: "icon content";
+				background:          #FAFAFA;
+				font-family:         "Roboto";
+				font-size:           12px;
+				min-height:          80px;
+			}
+
+			:host([collapsed]) .notificationLine
+			{
+				height:                80px;
+				grid-template-columns: 80px auto;
+			}
+
+			:host(:not([collapsed])) .notificationLine
+			{
+				grid-template-columns: 40px auto;
+				grid-template-areas:   "collaps content";
+
+				background-color: rgba(204, 204, 204, 0.1);
+			}
+
+			.notificationLine:hover
+			{
+				background: rgba(204, 204, 204, 0.5);
+			}
+
+			.notificationLine,
+			.collapsBtnBackground
+			{
+				transition: background-color 0.2s linear;
+			}
+
+			.collapsBtnBackground
+			{
+				display:         flex;
+				align-items:     center;
+				width:           100%;
+				height:          100%;
+				justify-content: center;
+				grid-area:       collaps;
+			}
+
+			.collapsBtnBackground:hover
+			{
+				background: rgba(0, 0, 0, 0.5);
+			}
+
+			.collapsBtnBackground .collapsBtn svg
+			{
+				fill:       rgb(111, 111, 111);
+				transition: fill 0.2s linear;
+			}
+
+			.collapsBtnBackground:hover .collapsBtn svg
+			{
+				fill: rgb(247, 247, 247);
+			}
+
+			:host([collapsed]) .notificationLine .collapsBtnBackground
+			{
+				display: none;
+			}
+
+			.content
+			{
+				grid-area:             content;
+				grid-template-areas:   "header header close" "text text text" ". time time";
+				grid-template-columns: 2fr 2fr 24px;
+				margin:                8px 8px 8px 12px;
+				display:               grid;
+			}
+
+			:host([collapsed]) .notificationLine .content
+			{
+				grid-template-rows: 24px 1fr 16px;
+			}
+
+			:host(:not([collapsed])) .notificationLine .content
+			{
+				grid-template-rows: auto auto 16px;
+			}
+
+			.icon
+			{
+				grid-area:         icon;
+				display:           none;
+				background-repeat: no-repeat;
+				background-size:   cover;
+			}
+
+			:host([collapsed]) .notificationLine .icon
+			{
+				display:         flex;
+				justify-content: center;
+				align-items:     center;
+			}
+
+			:host([collapsed]) .notificationLine .header,
+			:host([collapsed]) .notificationLine .text,
+			:host([collapsed]) .notificationLine .time
+			{
+				overflow:      hidden;
+				white-space:   nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.header
+			{
+				grid-area:   header;
+				font-family: "Roboto Bold";
+				font-size:   14px;
+			}
+
+			.text
+			{
+				grid-area: text;
+			}
+
+			:host(:not([collapsed])) .notificationLine .text
+			{
+				margin: 8px 0;
+			}
+
+			.time
+			{
+				grid-area:    time;
+				font-size:    10px;
+				justify-self: end;
+				align-self:   center;
+			}
+
+			.close
+			{
+				grid-area:    close;
+				justify-self: end;
+				align-self:   start;
+			}
+
+			.close,
+			.collapsBtnBackground,
+			:host([collapsed]) .notificationLine .text
+			{
+				cursor: pointer;
+			}
+
+		</style>
+		<div id="notificationMessage" class = "notificationLine"
+			 title = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci">
+			<div class = "collapsBtnBackground">
+				<div class = "collapsBtn">
+					<svg style = "width:24px;height:24px"
+						 fill = "#6F6F6F"
+						 viewBox = "0 0 24 24">
+						<path d = "M4,12H20V14H4V12M4,9H20V11H4V9M16,4L12,8L8,4H11V1H13V4H16M8,19L12,15L16,19H13V22H11V19H8Z"></path>
+					</svg>
+				</div>
+			</div>
+			<div class = "icon">
+
+			</div>
+			<div class = "content">
+				<div class = "header">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci
+									  velit
+				</div>
+				<div class = "close">
+					<svg style = "width:16px;height:16px"
+						 viewBox = "0 0 24 24">
+						<path fill = "#6F6F6F"
+							  d = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path>
+					</svg>
+				</div>
+				<div class = "text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vestibulum turpis
+									tortor,
+									posuere molestie nibh interdum a. Donec vehicula, nisi vitae interdum viverra, magna
+									urna
+									venenatis ipsum, ac sollicitudin diam metus vel justo. Sed turpis ante, condimentum id
+									magna
+									ut, sagittis rhoncus libero. Fusce magna ligula, scelerisque nec lacinia suscipit,
+									maximus
+									dictum libero. Fusce nulla est, luctus eu justo vitae, mattis sodales est. Proin eu
+									dignissim arcu. Phasellus arcu enim, semper id ullamcorper sed, viverra non sapien.
+									Curabitur neque quam, gravida vel ex at, viverra vestibulum metus. Aliquam cursus vel
+									est
+									sit amet placerat. Proin eu ante nec orci bibendum luctus. Donec id aliquam metus.
+									Nullam
+									scelerisque, urna non vestibulum consequat, purus libero rutrum ipsum, at sodales mauris
+									elit ut elit. Proin sollicitudin in quam vitae lobortis. Sed elementum interdum justo,
+									sit
+									amet molestie ipsum fringilla id. Lorem ipsum dolor sit amet, consectetur adipiscing
+									elit.
+									Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+									himenaeos.
+				</div>
+				<div class = "time">30.03.1996 10:38</div>
+			</div>
+		</div>
+	</template>
+</dom-module>

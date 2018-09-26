@@ -1,0 +1,386 @@
+<dom-module id = "material-notification-ring">
+	<template id = "main">
+		<style>
+			:host
+			{
+				display: block;
+				width:   42px;
+				height:  42px;
+			}
+
+			.notificationRing
+			{
+				font-family:      "Roboto";
+				display:          flex;
+				flex-direction:   column;
+				width:            42px;
+				height:           42px;
+				position:         relative;
+
+				--borderColor:    #BDBDBD;
+				--lineBackground: #FAFAFA;
+			}
+
+			.notificationRing .ring
+			{
+				border:          1px solid black;
+				height:          40px;
+				width:           40px;
+				display:         flex;
+				align-items:     center;
+				justify-content: center;
+				cursor:          pointer;
+			}
+
+			.notificationRing .ring,
+			.notificationRing .counter
+			{
+				border-radius: 50%;
+
+				transition:    border-color .2s, background-color .2s, color .2s;
+			}
+
+			:host(:not([hasNewMessages])) .notificationRing .counter
+			{
+				opacity: 0 !important;
+			}
+
+			.notificationRing .counter
+			{
+				background:      #F1652E;
+				border:          2px solid white;
+				color:           white;
+				font-size:       14px;
+				width:           24px;
+				height:          24px;
+				position:        absolute;
+				display:         flex;
+				align-items:     center;
+				justify-content: center;
+
+				margin-top:      -16px;
+				margin-left:     16px;
+			}
+
+			.notificationRing .ring svg
+			{
+				fill:       black;
+				transition: fill .2s;
+			}
+
+			.notificationRing .ring:hover
+			{
+				border-color: #F1652E;
+			}
+
+			.notificationRing .ring:active
+			{
+				background:   #EEEEEE;
+				border-color: black;
+			}
+
+			.notificationRing .ring:hover .counter
+			{
+				background: var(--borderColor);
+				color:      black;
+			}
+
+			.notificationRing .ring:hover:active .counter
+			{
+				background: #757575;
+				color:      white;
+			}
+
+			.notificationRing .ring:hover:active svg
+			{
+				fill: black;
+			}
+
+			.notificationRing .ring:hover svg
+			{
+				fill: #F1652E;
+			}
+
+			:host(:not([collapsed])) .notificationRing .collapsable
+			{
+				display: block;
+			}
+
+			.notificationRing .collapsable
+			{
+				display: none;
+			}
+
+			.notificationRing .shadowed
+			{
+				box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
+			}
+
+			.notificationRing .notifications.control
+			{
+				background:                 var(--lineBackground);
+				height:                     var(--notificationsControlSize);
+				width:                      var(--notificationsControlSize);
+				align-self:                 flex-end;
+				margin-top:                 calc(42px + 8px);
+				position:                   absolute;
+				margin-left:                24px;
+				border:                     1px solid var(--borderColor);
+
+				--headerHeight:             36px;
+				--notificationsControlSize: 350px;
+			}
+
+			.notificationRing .arrowUp
+			{
+				border-style: dashed dashed solid;
+				border-color: transparent;
+				height:       0;
+				width:        0;
+				margin-top:   42px;
+				position:     absolute;
+				align-self:   center;
+			}
+
+			.notificationRing .arrowUp.background
+			{
+				border-bottom-color: var(--lineBackground);
+				border-width:        2px 8px 8px;
+				z-index:             1;
+			}
+
+			.notificationRing .arrowUp.border
+			{
+				border-bottom-color: rgb(189, 189, 189);
+				border-width:        0 9px 9px;
+			}
+
+			.notificationRing .notifications.control .header
+			{
+				height:         var(--headerHeight);
+
+				display:        flex;
+				flex-direction: row;
+
+				border-bottom:  1px solid #F2F2F2;
+			}
+
+			.notificationRing .notifications.control .header .caption
+			{
+				width:       calc(100% - var(--headerHeight) * 2);
+				text-align:  center;
+				align-self:  center;
+				font-family: "Roboto bold";
+			}
+
+			.notificationRing .notifications.control .header .settings,
+			.notificationRing .notifications.control .header .exit
+			{
+				width:           var(--headerHeight);
+				height:          var(--headerHeight);
+
+				display:         flex;
+				align-items:     center;
+				justify-content: center;
+				cursor:          pointer;
+
+				fill:            rgba(0, 0, 0, 0.5);
+			}
+
+			.notificationRing .notifications.control .header .exit
+			{
+				display: none;
+			}
+
+			:host(:not([configurable])) .notificationRing .notifications.control .header .settings,
+			:host(:not([configurable])) .notificationRing .notifications.control .header .exit
+			{
+				display: none;
+			}
+
+			:host(:not([configurable])) .notificationRing .notifications.control .header .caption
+			{
+				width: 100%;
+			}
+
+			.notificationRing .notifications.control .header .settings:hover,
+			.notificationRing .notifications.control .header .exit:hover
+			{
+				fill: rgba(0, 0, 0, 0.7);
+			}
+
+			.notificationRing .notifications.control .header .settings:hover:active,
+			.notificationRing .notifications.control .header .exit:hover:active
+			{
+				fill: rgba(0, 0, 0, 0.9);
+			}
+
+			.notificationRing .notifications.control .content
+			{
+				display:        flex;
+				flex-direction: column;
+
+				transition:     flex-basis .2s;
+			}
+
+			:host(:not([settingsPage])) .notificationRing .notifications.control .notificationsList.content,
+			:host([settingsPage]) .notificationRing .notifications.control .settingsList.content
+			{
+				flex-basis: var(--notificationsControlSize);
+				overflow:   initial;
+			}
+
+			:host(:not([settingsPage])) .notificationRing .notifications.control .header .settingsIcon,
+			:host([settingsPage]) .notificationRing .notifications.control .header .backIcon
+			{
+				display: block;
+			}
+
+			:host([settingsPage]) .notificationRing .notifications.control .header .settingsIcon,
+			:host(:not([settingsPage])) .notificationRing .notifications.control .header .backIcon
+			{
+				display: none;
+			}
+
+			:host([settingsPage]) .notificationRing .notifications.control .notificationsList.content,
+			:host(:not([settingsPage])) .notificationRing .notifications.control .settingsList.content
+			{
+				flex-basis: 0;
+				overflow:   hidden;
+			}
+
+			.notificationRing .notifications.control .settingsList.content .settingContainer
+			{
+				background: var(--lineBackground);
+			}
+
+			.notificationRing .notifications.control .notificationsList.content material-notification-line,
+			.notificationRing .notifications.control .settingsList.content .settingContainer
+			{
+				margin-top: 2px;
+				width:      100%;
+			}
+
+			.notificationRing .notifications.control .pages
+			{
+				display:    flex;
+
+				overflow:   hidden;
+				overflow-y: auto;
+
+				background: rgba(0, 0, 0, 0.03);
+				padding:    0 2px 0 2px;
+
+				height:     calc(100% - var(--headerHeight) - 1px);
+			}
+
+			.notificationRing .ring,
+			.notificationRing .counter,
+			.notificationRing .notifications.control .header .caption
+			{
+				user-select: none;
+			}
+
+			@media screen and (max-width: 700px), (max-height: 700px) and (orientation: portrait)
+			{
+				.notificationRing .arrowUp
+				{
+					display: none;
+				}
+
+				.notificationRing .notifications.control
+				{
+					margin:                     0;
+					top:                        0;
+					left:                       0;
+					position:                   fixed;
+					height:                     100vh;
+					width:                      100vw;
+					--notificationsControlSize: 100vmin;
+				}
+
+				:host(:not([settingsPage])) .notificationRing .notifications.control .notificationsList.content,
+				:host([settingsPage]) .notificationRing .notifications.control .settingsList.content
+				{
+					flex-basis: 100vw;
+				}
+
+				.notificationRing .notifications.control .header .exit
+				{
+					display: flex;
+				}
+			}
+
+		</style>
+		<div id="notificationRing" class = "notificationRing">
+			<div class = "ring">
+				<svg style = "width:24px;height:24px"
+					 viewBox = "0 0 24 24">
+					<g>
+						<path d = "m19.073834,10.553687c0,-5.482942 -2.949328,-7.348041 -5.707653,
+						  -7.763756c0,-0.028089 0.005618,-0.056178 0.005618,-0.089884c0,
+						  -0.690985 -0.612337,-1.241527 -1.3595,-1.241527c-0.747163,0 -1.337029,
+						  0.550541 -1.337029,1.241527c0,0.033707 0,0.061795 0.005618,
+						  0.089884c-2.763942,0.421333 -5.730124,2.292049 -5.730124,7.774991c0,
+						  6.39302 -1.589828,7.078388 -3.72458,8.876074l21.57223,0c-2.123516,
+						  -1.803304 -3.72458,-2.494289 -3.72458,-8.887309zm-15.420774,7.982849c0.483128,
+						  -0.505599 0.921314,-1.033669 1.275233,-1.78645c0.674132,-1.421295 0.977492,
+						  -3.325719 0.977492,-6.190781c0,-2.606644 0.702221,-4.516686 2.084192,
+						  -5.685181c1.286469,-1.084229 2.904386,-1.30894 4.033558,-1.30894c1.129171,
+						  0 2.747089,0.224711 4.022322,1.30894c1.376353,1.162878 2.078574,3.061684 2.078574,
+						  5.668328c0,4.70769 0.837047,6.589642 2.263961,7.994084l-16.735332,0z" />
+						<path d = "m12.063805,22.865074c1.713337,0 3.119807,-1.272216 3.305205,
+						  -2.74901l-6.610411,0c0.179005,1.476794 1.591869,2.74901 3.305205,2.74901z" />
+					</g>
+				</svg>
+				<div class = "counter">0</div>
+			</div>
+			<div class = "collapsable arrowUp background"></div>
+			<div class = "collapsable arrowUp border"></div>
+			<div class = "collapsable notifications control shadowed">
+				<div class = "header shadowed">
+					<div class = "settings">
+						<svg class = "settingsIcon"
+							 width = "24px"
+							 height = "24px"
+							 viewBox = "0 0 24 24">
+							<path d = "M19.4,13c0-0.3,0.1-0.6,0.1-1s0-0.7-0.1-1l2.1-1.7c0.2-0.2,
+						0.2-0.4,0.1-0.6l-2-3.5C19.5,5.1,19.3,5,19,5.1l-2.5,
+						1 c-0.5-0.4-1.1-0.7-1.7-1l-0.4-2.6C14.5,2.2,14.2,2,14,
+						2h-4C9.8,2,9.5,2.2,9.5,2.4L9.1,5.1C8.5,5.3,8,5.7,7.4,6.1L5,
+						5.1 C4.7,5,4.5,5.1,4.3,5.3l-2,3.5C2.2,8.9,2.3,9.2,2.5,9.4L4.6,
+						11c0,0.3-0.1,0.6-0.1,1s0,0.7,0.1,1l-2.1,1.7 c-0.2,0.2-0.2,0.4-0.1,
+						0.6l2,3.5C4.5,18.9,4.7,19,5,18.9l2.5-1c0.5,0.4,1.1,0.7,1.7,1l0.4,
+						2.6c0,0.2,0.2,0.4,0.5,0.4h4 c0.2,0,0.5-0.2,0.5-0.4l0.4-2.6c0.6-0.3,
+						1.2-0.6,1.7-1l2.5,1c0.2,0.1,0.5,0,0.6-0.2l2-3.5c0.1-0.2,0.1-0.5-0.1-0.6L19.4,
+						13z M12,15.5c-1.9,0-3.5-1.6-3.5-3.5s1.6-3.5,3.5-3.5s3.5,1.6,3.5,
+						3.5S13.9,15.5,12,15.5z"></path>
+						</svg>
+						<svg class = "backIcon"
+							 width = "24px"
+							 height = "24px"
+							 viewBox = "0 0 24 24">
+							<path d = "M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z"></path>
+						</svg>
+					</div>
+					<div class = "caption">Header</div>
+					<div class = "exit">
+						<svg style = "width:24px;height:24px"
+							 viewBox = "0 0 24 24">
+							<path d = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,
+						17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+						</svg>
+					</div>
+				</div>
+				<div class = "pages">
+					<div class = "notificationsList content">
+
+					</div>
+					<div class = "settingsList content">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+</dom-module>
