@@ -7,6 +7,7 @@
 		  content = "#db5945">
 	<script src = "ReferenceAssembler.js"
 			type = "text/javascript"></script>
+	<link rel="stylesheet" href="GriddedButton.css"/>
 	<style>
 		@font-face
 		{
@@ -19,21 +20,122 @@
 			font-family: "Roboto Bold";
 			src:         url("fonts/Roboto/Roboto-Bold.ttf");
 		}
+
+		.userProfile
+		{
+			font-family:     "Roboto";
+			height:          130px;
+			width:           300px;
+			justify-content: space-between;
+			background:      rgb(255, 255, 255);
+			margin:          0 -2px;
+		}
+
+		.userProfile,
+		.userInfo,
+		.actions
+		{
+			display: flex;
+		}
+
+		.userInfo
+		{
+			margin: 6px 6px 0px 6px;
+		}
+
+		.userProfile,
+		.userInfo
+		{
+			flex-direction: column;
+		}
+
+		.displayName
+		{
+			font-family: "Roboto Bold";
+			font-size:   32px;
+		}
+
+		.roleDisplayName
+		{
+			font-size:  14px;
+			margin-top: 8px;
+		}
+
+		.actions
+		{
+			flex-direction:  row;
+			justify-content: space-between;
+			background:      rgba(121, 121, 121, 0.1);
+			align-items:     center;
+			border-top:      1px solid rgba(0, 0, 0, 0.14);
+			padding:         0 8px;
+		}
+
+		.versionInfo
+		{
+			font-size:    10px;
+			color:        gray;
+			margin-right: 16px;
+		}
+
+		.action
+		{
+			margin: 4px 0;
+		}
+
+		.text
+		{
+			text-overflow: ellipsis;
+			overflow:      hidden;
+			width:         100%;
+			white-space:   nowrap;
+		}
+
+		@media screen and (max-width: 650px), (max-height: 650px) and (orientation: portrait)
+		{
+			.userProfile
+			{
+				border-radius: 4px;
+				border:        1px solid rgba(0, 0, 0, 0.2);
+				box-shadow:    0 2px 10px rgba(0, 0, 0, .2);
+			}
+		}
 	</style>
 </head>
 <body>
 <material-notification-line id="aa" style="display: none"></material-notification-line>
-<material-notification-ring id="rr" style="margin-left: 50vw"></material-notification-ring>
+<material-notification-ring id="rr" style="margin-left: 50vw;display: none"></material-notification-ring>
+<material-user-ring id="uu" style="margin-left: 50vw;display: block">
+	<div class = "userProfile">
+		<div class = "userInfo">
+			<div class = "displayName text">Igor</div>
+			<div class = "roleDisplayName text">Administrator</div>
+		</div>
+		<div class = "actions">
+			<div class = "versionInfo text">Version 2.14.1.5093</div>
+			<div class = "action griddedButton outlined">Logout</div>
+		</div>
+	</div>
+</material-user-ring>
 </body>
 <script>
 	window.Builder
 		  .EnableWebComponents()
 		  .RegisterScript("PolymerNotificationRing/PolymerNotificationRing.js")
+		  .RegisterScript("PolymerUserRing/PolymerUserRing.js")
 		  .Build()
 		  .AfterAll(() => Initialize());
 
 	function Initialize()
 	{
+		uu.Title = "Профиль пользователя";
+		uu.IsHeadless = true;
+
+		uu.addEventListener("ringClicked", () => console.log("ringClicked"));
+		uu.addEventListener("userRingExpanded", () => console.log("userRingExpanded"));
+		uu.addEventListener("userRingCollapsed", () => console.log("userRingCollapsed"));
+		uu.addEventListener("exitClicked", () => console.log("exitClicked"));
+
 		rr.Title = "Уведомления";
 
 		rr.addEventListener("ringClicked", () => console.log("ringClicked"));

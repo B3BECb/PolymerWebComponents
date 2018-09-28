@@ -1,0 +1,100 @@
+﻿.griddedButton
+{
+	font-family:         "Roboto";
+	display:             grid;
+	grid-template-areas: "text";
+	height:              36px;
+	grid-template-rows:  auto;
+	border-radius:       4px;
+	cursor:              pointer;
+	min-width:           64px;
+	justify-items:       center;
+	align-items:         center;
+	padding-left:        8px;
+	padding-right:       8px;
+	font-size:           14px;
+	font-weight:         bold;
+	text-transform:      uppercase;
+
+	transition:          background .2s linear, box-shadow .28s cubic-bezier(.4, 0, .2, 1), -webkit-box-shadow .28s cubic-bezier(.4, 0, .2, 1);
+}
+
+.griddedButton.iconSupported
+{
+	padding-left:          12px;
+	grid-template-areas:   "icon . text";
+	grid-template-columns: 18px 8px auto;
+}
+
+.griddedButton.outlined,
+.griddedButton.contained
+{
+	padding-left:  16px;
+	padding-right: 16px;
+}
+
+.griddedButton.contained
+{
+	background: white;
+	box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+}
+
+.griddedButton.contained.disabled
+{
+	background: #BDBDBD;
+}
+
+.griddedButton.outlined
+{
+	border: 1px solid #616161;
+}
+
+.griddedButton.disabled
+{
+	cursor: default;
+	color:  #616161;
+}
+
+.griddedButton .icon
+{
+	grid-area: icon;
+	display:   none;
+	width:     100%;
+}
+
+.griddedButton.disabled .icon
+{
+	fill: #616161;
+}
+
+.griddedButton.iconSupported .icon
+{
+	display: block;
+}
+
+.griddedButton .text
+{
+	grid-area: text;
+}
+
+.griddedButton:not(.disabled):hover
+{
+	background: rgba(158, 158, 158, 0.12);
+}
+
+.griddedButton:not(.disabled):active
+{
+	background: rgba(134, 134, 134, 0.31);
+}
+
+.griddedButton.contained:not(.disabled):hover
+{
+	background: #E0E0E0;
+	box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
+}
+
+.griddedButton.contained:not(.disabled):active
+{
+	background: #BDBDBD;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+}
