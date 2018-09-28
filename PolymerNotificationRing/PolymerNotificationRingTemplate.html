@@ -101,16 +101,6 @@
 				fill: #F1652E;
 			}
 
-			:host(:not([collapsed])) .notificationRing .collapsable
-			{
-				display: block;
-			}
-
-			.notificationRing .collapsable
-			{
-				display: none;
-			}
-
 			.notificationRing .shadowed
 			{
 				box-shadow: 0 2px 10px rgba(0, 0, 0, .2);
@@ -187,17 +177,6 @@
 				fill:            rgba(0, 0, 0, 0.5);
 			}
 
-			.notificationRing .notifications.control .header .exit
-			{
-				display: none;
-			}
-
-			:host(:not([configurable])) .notificationRing .notifications.control .header .settings,
-			:host(:not([configurable])) .notificationRing .notifications.control .header .exit
-			{
-				display: none;
-			}
-
 			:host(:not([configurable])) .notificationRing .notifications.control .header .caption
 			{
 				width: 100%;
@@ -231,13 +210,17 @@
 			}
 
 			:host(:not([settingsPage])) .notificationRing .notifications.control .header .settingsIcon,
-			:host([settingsPage]) .notificationRing .notifications.control .header .backIcon
+			:host([settingsPage]) .notificationRing .notifications.control .header .backIcon,
+			:host(:not([collapsed])) .notificationRing .collapsable
 			{
 				display: block;
 			}
 
 			:host([settingsPage]) .notificationRing .notifications.control .header .settingsIcon,
-			:host(:not([settingsPage])) .notificationRing .notifications.control .header .backIcon
+			:host(:not([settingsPage])) .notificationRing .notifications.control .header .backIcon,
+			:host(:not([configurable])) .notificationRing .notifications.control .header .settings,
+			.notificationRing .notifications.control .header .exit,
+			.notificationRing .collapsable
 			{
 				display: none;
 			}
@@ -308,6 +291,12 @@
 				.notificationRing .notifications.control .header .exit
 				{
 					display: flex;
+				}
+
+				:host(:not([configurable])) .notificationRing .notifications.control .header .caption
+				{
+					width:       calc(100% - var(--headerHeight) * 2);
+					margin-left: var(--headerHeight);
 				}
 			}
 
