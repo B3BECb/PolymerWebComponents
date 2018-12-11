@@ -55,6 +55,7 @@
 			  style = "width: 600px; height: 300px"></video-player>
 <video-player id = "test"
 			  style = "width: 600px; height: 300px"></video-player>
+<md-page-loading id="pl"></md-page-loading>
 </body>
 <script type = "text/javascript">
 
@@ -82,6 +83,7 @@
 			  .RegisterScript("PolymerFiltrableSearchInput/PolymerFiltrableSearchInput.js")
 			  .RegisterScript("PolymerDataTable/PolymerDataTable.js")
 			  .RegisterScript("PolymerVideoplayer/PolymerVideoplayer.js")
+			  .RegisterScript("PolymerPageLoading/PolymerPageLoading.js")
 			  .Build()
 			  .AfterAll(() => Initialize());
 
@@ -93,8 +95,33 @@
 		console.log(args.detail);
 	});
 
+	function sleep(ms) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	async function LoadingTest()
+	{
+		pl.ChangeState(PageLoaderStates.Loading);
+
+		pl.Value = 10;
+
+		await sleep(1000);
+
+		pl.Value = 30;
+
+		await sleep(5000);
+
+		pl.Value = 60;
+
+		await sleep(1000);
+
+		pl.ChangeState(PageLoaderStates.Error);
+	}
+
 	function Initialize()
 	{
+		LoadingTest();
+
 		InitializeSearchFilters();
 		ConfigureTable();
 

@@ -1,0 +1,121 @@
+<dom-module id = "md-page-loading">
+	<template id = "main">
+		<style>
+			.hidden
+			{
+				display: none !important;
+			}
+
+			.loader.container
+			{
+				width:               100vw;
+				height:              100vh;
+
+				position:            fixed;
+				top:                 0;
+				left:                0;
+
+				z-index:             1;
+
+				background:          rgba(0, 0, 0, 0.3);
+
+				display:             grid;
+				grid-template-areas: "center";
+			}
+
+			.loader.container .circle.loader
+			{
+				border:            16px solid transparent;
+				border-radius:     50%;
+				border-top:        16px solid #2196F3;
+				width:             100px;
+				height:            100px;
+				-webkit-animation: spin 2s linear infinite; /* Safari */
+				animation:         spin 2s linear infinite;
+			}
+
+			.loader.container .percent
+			{
+				font-size:   34px;
+				color:       white;
+				font-weight: bold;
+				font-family: 'Roboto';
+				text-align:  center;
+			}
+
+			.loader.container .percent,
+			.loader.container .circle.loader
+			{
+				grid-area: center;
+			}
+
+			.loader.container.error .percent,
+			.loader.container .circle.loader svg
+			{
+				display: none;
+			}
+
+			.loader.container.error .circle.loader
+			{
+				animation:  none;
+				border:     none;
+				background: #D32F2F;
+				cursor:     pointer;
+
+				display:    flex;
+			}
+
+			.loader.container.error .circle.loader svg
+			{
+				display: block;
+			}
+
+			.loader.container,
+			.loader.container.error .circle.loader
+			{
+				align-items:     center;
+				justify-content: center;
+			}
+
+			@-webkit-keyframes spin
+			{
+				0%
+				{
+					-webkit-transform: rotate(0deg);
+				}
+				100%
+				{
+					-webkit-transform: rotate(360deg);
+				}
+			}
+
+			@keyframes spin
+			{
+				0%
+				{
+					transform: rotate(0deg);
+				}
+				100%
+				{
+					transform: rotate(360deg);
+				}
+			}
+		</style>
+
+		<div id = "pageLoading"
+			 class = "loader container hidden">
+			<div class = "percent">
+				<span class = "value">100</span>
+				<span>%</span>
+			</div>
+			<div class = "circle loader">
+				<svg style = "width:64px;height:64px"
+					 viewBox = "0 0 24 24">
+					<path fill = "#FFF"
+						  d = "M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,
+			12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"></path>
+				</svg>
+			</div>
+		</div>
+	</template>
+</dom-module>
